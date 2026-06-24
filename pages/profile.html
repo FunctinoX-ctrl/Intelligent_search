@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人主页 - Intelligent Search</title>
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/profile.css" id="profileStylesheet">
+  <style id="dynamicStyles"></style>
+  <style id="customBtnStyles"></style>
+</head>
+<body>
+  <input type="file" id="bgUploadInput" accept="image/*" style="display: none;">
+  <input type="color" id="btnColorPicker" style="display: none;">
+
+  <div class="app-container profile-app">
+    <main class="app-main">
+      <aside class="sidebar left-sidebar">
+        <div class="sidebar-section nav-section">
+          <a href="home.html" class="back-btn-link">
+            <span class="back-icon">←</span>
+            <span>返回首页</span>
+          </a>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">关于作者</h3>
+          <div class="author-info-card" id="authorInfoCard">
+            <div class="author-avatar-large" id="authorAvatar">U</div>
+            <div class="author-name" id="authorName">加载中...</div>
+            <div class="author-role" id="authorRole">-</div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">作者统计</h3>
+          <div class="author-stats">
+            <div class="author-stat-item">
+              <span class="author-stat-num" id="authorPostCount">0</span>
+              <span class="author-stat-label">文章</span>
+            </div>
+            <div class="author-stat-item">
+              <span class="author-stat-num" id="authorLikeCount">0</span>
+              <span class="author-stat-label">获赞</span>
+            </div>
+            <div class="author-stat-item">
+              <span class="author-stat-num">128</span>
+              <span class="author-stat-label">关注</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">联系方式</h3>
+          <div class="contact-list">
+            <div class="contact-item">
+              <span class="contact-icon">📧</span>
+              <span class="contact-text" id="contactEmail">-</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="divider vertical-divider"></div>
+
+      <section class="content profile-content">
+        <div class="profile-header-card">
+          <div class="profile-avatar-section">
+            <div class="profile-avatar-large" id="profileAvatar">U</div>
+            <div class="profile-title-info">
+              <h1 class="profile-title" id="profileTitle">用户名</h1>
+              <div class="profile-badges">
+                <span class="profile-badge" id="profileBadge">个人用户</span>
+              </div>
+            </div>
+          </div>
+          <div class="profile-meta-row" id="profileMetaRow">
+            <span class="profile-meta-item">
+              <span class="meta-icon">📅</span>
+              <span>加入于 <span id="profileJoinTime">-</span></span>
+            </span>
+            <span class="profile-meta-item" id="enterpriseDeptItem" style="display: none;">
+              <span class="meta-icon">🏢</span>
+              <span id="profileDept">-</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="profile-posts-card">
+          <div class="profile-tabs-bar">
+            <span class="profile-tab active" data-tab="posts">发布的文章</span>
+            <span class="profile-tab" data-tab="hot">精选高赞</span>
+          </div>
+
+          <div class="profile-posts-container">
+            <div class="posts-list" id="postsList">
+              <div class="post-item loading">加载中...</div>
+            </div>
+            <div class="pagination" id="postsPagination"></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider vertical-divider"></div>
+
+      <aside class="sidebar right-sidebar">
+        <div class="sidebar-section right-user-section">
+          <div class="right-user-card" id="rightUserCard">
+            <div class="right-user-avatar" id="rightUserAvatar">U</div>
+            <div class="right-user-info">
+              <div class="right-user-name" id="rightUserName">用户</div>
+              <div class="right-user-role" id="rightUserRole">个人用户</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section settings-section">
+          <h3 class="sidebar-title">设置</h3>
+          <div class="settings-buttons">
+            <button class="settings-btn" id="themeToggleBtn">
+              <span class="settings-icon">🌓</span>
+              <span class="settings-text">深色/浅色模式</span>
+              <span class="settings-status" id="themeStatus">浅色</span>
+            </button>
+            <button class="settings-btn" id="bgToggleBtn">
+              <span class="settings-icon">🖼️</span>
+              <span class="settings-text">更换背景</span>
+            </button>
+            <div class="background-options-section" id="bgOptionsSection" style="display: none;">
+              <div class="bg-options-grid">
+                <div class="bg-option active" data-bg="default" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                  <span class="bg-option-name">默认</span>
+                </div>
+                <div class="bg-option" data-bg="sunset" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                  <span class="bg-option-name">晚霞</span>
+                </div>
+                <div class="bg-option" data-bg="ocean" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                  <span class="bg-option-name">海洋</span>
+                </div>
+                <div class="bg-option" data-bg="forest" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
+                  <span class="bg-option-name">森林</span>
+                </div>
+              </div>
+              <div class="bg-upload-section">
+                <button class="bg-upload-btn" id="bgUploadBtn">
+                  <span>📤</span>
+                  <span>上传自定义背景</span>
+                </button>
+              </div>
+            </div>
+            <button class="settings-btn" id="btnColorBtn">
+              <span class="settings-icon">🎨</span>
+              <span class="settings-text">主题色按钮</span>
+              <span class="settings-color-dot" id="btnColorDot"></span>
+            </button>
+            <button class="settings-btn logout-btn" id="logoutBtn">
+              <span class="settings-icon">🚪</span>
+              <span class="settings-text">退出登录</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-section personal-posts-section">
+          <h3 class="sidebar-title">最近文章</h3>
+          <ul class="recent-posts-list" id="recentPostsList">
+            <li class="recent-post-item loading">加载中...</li>
+          </ul>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const isElectron = !!window.electronAPI;
+    const API_BASE = isElectron ? null : '/api';
+
+    const api = {
+      token: localStorage.getItem('token') || '',
+      user: JSON.parse(localStorage.getItem('user') || 'null'),
+
+      setAuth(token, user) {
+        this.token = token;
+        this.user = user;
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+      },
+
+      clearAuth() {
+        this.token = '';
+        this.user = null;
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      },
+
+      async request(path, options = {}) {
+        const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+        if (this.token) {
+          headers['Authorization'] = `Bearer ${this.token}`;
+        }
+        if (isElectron) {
+          return await this.electronRequest(path, options);
+        }
+        const response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+        return await response.json();
+      },
+
+      async electronRequest(path, options = {}) {
+        return { success: false, message: '接口未实现' };
+      },
+
+      getUserProfile(userId, userType) {
+        return this.request(`/user/profile?userId=${userId}&userType=${userType}`);
+      },
+
+      getUserPosts(userId, userType, page = 1, pageSize = 10, sort = 'latest') {
+        return this.request(`/posts/user/${userId}?userType=${userType}&page=${page}&pageSize=${pageSize}&sort=${sort}`);
+      },
+
+      logout() {
+        this.clearAuth();
+        window.location.href = 'login.html';
+      }
+    };
+
+    let currentUserId = null;
+    let currentUserType = 'personal';
+    let currentPage = 1;
+    let totalPages = 1;
+    let currentTab = 'posts';
+    let currentTheme = localStorage.getItem('appTheme') || 'light';
+    let currentBg = localStorage.getItem('appBg') || 'default';
+    let customBg = localStorage.getItem('appCustomBg') || '';
+    let customBtnColor = localStorage.getItem('appBtnColor') || '#667eea';
+
+    const backgroundStyles = {
+      'default': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+      'sunset': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      'ocean': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+      'forest': 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+      'night': 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)'
+    };
+
+    function init() {
+      const params = new URLSearchParams(window.location.search);
+      currentUserId = parseInt(params.get('userId'));
+      currentUserType = params.get('userType') || 'personal';
+
+      if (!currentUserId) {
+        if (api.user) {
+          currentUserId = api.user.id;
+          currentUserType = api.user.userType;
+        } else {
+          window.location.href = 'login.html';
+          return;
+        }
+      }
+
+      applyCustomBtnColor(customBtnColor);
+      applyTheme(currentTheme);
+      applyBackground(currentBg);
+      updateRightUserInfo();
+      loadUserProfile();
+      loadUserPosts();
+      updateSettingsVisibility();
+      bindEvents();
+
+      // 监听其他页面修改的主题设置
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'appTheme') {
+          currentTheme = e.newValue || 'light';
+          applyTheme(currentTheme);
+        } else if (e.key === 'appBg') {
+          if (e.newValue === 'custom') {
+            customBg = localStorage.getItem('appCustomBg') || '';
+          }
+          applyBackground(e.newValue || 'default');
+        } else if (e.key === 'appBtnColor') {
+          applyCustomBtnColor(e.newValue || '#667eea');
+        }
+      });
+    }
+
+    function updateRightUserInfo() {
+      const user = api.user;
+      if (!user) return;
+
+      const displayName = user.userType === 'personal'
+        ? user.username
+        : (user.real_name || user.employee_id || '用户');
+      const roleText = user.role === 'root' ? '管理员' : (user.userType === 'enterprise' ? '企业用户' : '个人用户');
+
+      document.getElementById('rightUserAvatar').textContent = displayName.charAt(0).toUpperCase();
+      document.getElementById('rightUserAvatar').style.background = user.userType === 'enterprise'
+        ? 'linear-gradient(135deg, #0ea5e9, #6366f1)'
+        : 'linear-gradient(135deg, #10b981, #059669)';
+      document.getElementById('rightUserName').textContent = displayName;
+      document.getElementById('rightUserRole').textContent = roleText;
+    }
+
+    function isOwnProfile() {
+      const user = api.user;
+      return user && user.id === currentUserId && user.userType === currentUserType;
+    }
+
+    function updateSettingsVisibility() {
+      const isOwn = isOwnProfile();
+
+      const bgToggleBtn = document.getElementById('bgToggleBtn');
+      const btnColorBtn = document.getElementById('btnColorBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const bgOptionsSection = document.getElementById('bgOptionsSection');
+
+      if (isOwn) {
+        if (bgToggleBtn) bgToggleBtn.style.display = 'flex';
+        if (btnColorBtn) btnColorBtn.style.display = 'flex';
+        if (logoutBtn) logoutBtn.style.display = 'flex';
+      } else {
+        if (bgToggleBtn) bgToggleBtn.style.display = 'none';
+        if (btnColorBtn) btnColorBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (bgOptionsSection) bgOptionsSection.style.display = 'none';
+      }
+    }
+
+    function applyCustomBtnColor(color) {
+      customBtnColor = color;
+      localStorage.setItem('appBtnColor', color);
+
+      const btnStyles = document.getElementById('customBtnStyles');
+      btnStyles.innerHTML = `
+        .settings-btn {
+          border-color: ${color}20 !important;
+        }
+        .settings-btn:hover {
+          border-color: ${color}60 !important;
+          background: ${color}10 !important;
+        }
+        .back-btn-link {
+          background: ${color}15 !important;
+          color: ${color} !important;
+        }
+        .back-btn-link:hover {
+          background: ${color}25 !important;
+        }
+        .profile-tab.active {
+          color: ${color} !important;
+          border-bottom-color: ${color} !important;
+        }
+        .profile-badge {
+          background: ${color}15 !important;
+          color: ${color} !important;
+        }
+        .page-btn.active {
+          background: linear-gradient(135deg, ${color}, ${adjustColor(color, 30)}) !important;
+        }
+        .page-btn:hover:not(:disabled):not(.active) {
+          border-color: ${color} !important;
+          color: ${color} !important;
+        }
+        .profile-post-item:hover {
+          border-color: ${color}30 !important;
+          box-shadow: 0 8px 24px ${color}20 !important;
+        }
+        .author-role {
+          background: ${color}15 !important;
+          color: ${color} !important;
+        }
+        .settings-status {
+          background: ${color}15 !important;
+          color: ${color} !important;
+        }
+      `;
+
+      document.getElementById('btnColorDot').style.background = color;
+    }
+
+    function adjustColor(color, amount) {
+      const hex = color.replace('#', '');
+      const r = Math.min(255, parseInt(hex.substr(0, 2), 16) + amount);
+      const g = Math.min(255, parseInt(hex.substr(2, 2), 16) + amount);
+      const b = Math.min(255, parseInt(hex.substr(4, 2), 16) + amount);
+      return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    }
+
+    function applyTheme(theme) {
+      currentTheme = theme;
+      localStorage.setItem('appTheme', theme);
+
+      const dynamicStyles = document.getElementById('dynamicStyles');
+      if (theme === 'dark') {
+        dynamicStyles.innerHTML = `
+          body { color: #f0f0f0 !important; }
+          .app-container.profile-app { background: rgba(10, 10, 15, 0.85) !important; }
+          .profile-header-card {
+            background: rgba(20, 20, 25, 0.9) !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+          }
+          .profile-title { color: #ffffff !important; }
+          .profile-meta-item { color: #a0a0a0 !important; }
+          .profile-tabs-bar {
+            background: rgba(20, 20, 25, 0.9) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+          }
+          .profile-posts-card {
+            background: rgba(20, 20, 25, 0.9) !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+          }
+          .profile-posts-container { background: rgba(20, 20, 25, 0.9) !important; }
+          .profile-tab { color: #888 !important; }
+          .sidebar-section {
+            background: rgba(20, 20, 25, 0.9) !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+          }
+          .sidebar-title { color: #f0f0f0 !important; }
+          .sidebar-title.sub-title { color: #888 !important; }
+          .back-btn-link {
+            background: rgba(102, 126, 234, 0.15) !important;
+            color: #818cf8 !important;
+          }
+          .back-btn-link:hover { background: rgba(102, 126, 234, 0.25) !important; }
+          .author-info-card { background: transparent !important; border: none !important; box-shadow: none !important; }
+          .author-name { color: #f0f0f0 !important; }
+          .author-role { color: #a0a0a0 !important; }
+          .author-stat-item { background: rgba(30, 30, 40, 0.8) !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .author-stat-num { color: #f0f0f0 !important; }
+          .author-stat-label { color: #888 !important; }
+          .contact-item { background: rgba(30, 30, 40, 0.8) !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .contact-text { color: #a0a0a0 !important; }
+          .right-user-card { background: transparent !important; border: none !important; box-shadow: none !important; }
+          .right-user-name { color: #f0f0f0 !important; }
+          .right-user-role { color: #888 !important; }
+          .settings-btn { background: rgba(30, 30, 40, 0.8) !important; color: #e0e0e0 !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .settings-btn:hover { background: rgba(40, 40, 50, 0.9) !important; }
+          .settings-btn.logout-btn { background: rgba(239, 68, 68, 0.1) !important; border-color: rgba(239, 68, 68, 0.2) !important; color: #ef4444 !important; }
+          .settings-btn.logout-btn:hover { background: rgba(239, 68, 68, 0.2) !important; }
+          .recent-post-item { background: rgba(30, 30, 40, 0.8) !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .recent-post-item:hover { background: rgba(40, 40, 50, 0.9) !important; }
+          .recent-post-title { color: #e0e0e0 !important; }
+          .recent-post-likes { color: #888 !important; }
+          .profile-post-item { background: rgba(20, 20, 25, 0.9) !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .profile-post-item:hover { background: rgba(30, 30, 40, 0.95) !important; }
+          .profile-post-item .post-title { color: #f0f0f0 !important; }
+          .profile-post-item .post-summary { color: #a0a0a0 !important; }
+          .profile-post-item .post-time { color: #666 !important; }
+          .profile-post-item .stat-item { color: #888 !important; }
+          .profile-post-item .post-tag { background: rgba(255, 255, 255, 0.06) !important; color: #a0a0a0 !important; }
+          .page-btn { background: rgba(20, 20, 25, 0.9) !important; color: #e0e0e0 !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .page-btn:disabled { color: #666 !important; }
+          .bg-upload-btn { background: rgba(30, 30, 40, 0.8) !important; color: #e0e0e0 !important; border: 1px dashed rgba(255, 255, 255, 0.1) !important; }
+          .bg-upload-btn:hover { background: rgba(40, 40, 50, 0.9) !important; }
+          .empty-text { color: #888 !important; }
+          .profile-posts-container .post-item.loading { color: #888 !important; }
+        `;
+        document.getElementById('themeStatus').textContent = '深色';
+      } else {
+        dynamicStyles.innerHTML = '';
+        document.getElementById('themeStatus').textContent = '浅色';
+      }
+    }
+
+    function applyBackground(bg) {
+      currentBg = bg;
+      localStorage.setItem('appBg', bg);
+
+      if (bg === 'custom' && customBg) {
+        document.body.style.background = `url('${customBg}') no-repeat center center`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundAttachment = 'fixed';
+      } else if (backgroundStyles[bg]) {
+        document.body.style.background = backgroundStyles[bg];
+        document.body.style.backgroundSize = 'auto';
+        document.body.style.backgroundAttachment = 'fixed';
+      } else {
+        document.body.style.background = backgroundStyles['default'];
+        document.body.style.backgroundSize = 'auto';
+        document.body.style.backgroundAttachment = 'fixed';
+      }
+
+      document.querySelectorAll('.bg-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.bg === bg);
+      });
+    }
+
+    function bindEvents() {
+      const tabs = document.querySelectorAll('.profile-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentTab = tab.dataset.tab;
+          currentPage = 1;
+          loadUserPosts();
+        });
+      });
+
+      document.getElementById('themeToggleBtn').addEventListener('click', () => {
+        applyTheme(currentTheme === 'light' ? 'dark' : 'light');
+      });
+
+      document.getElementById('bgToggleBtn').addEventListener('click', () => {
+        const bgSection = document.getElementById('bgOptionsSection');
+        bgSection.style.display = bgSection.style.display === 'none' ? 'block' : 'none';
+      });
+
+      document.querySelectorAll('.bg-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          customBg = '';
+          localStorage.removeItem('appCustomBg');
+          applyBackground(opt.dataset.bg);
+        });
+      });
+
+      document.getElementById('bgUploadBtn').addEventListener('click', () => {
+        document.getElementById('bgUploadInput').click();
+      });
+
+      document.getElementById('bgUploadInput').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            customBg = event.target.result;
+            localStorage.setItem('appCustomBg', customBg);
+            currentBg = 'custom';
+            localStorage.setItem('appBg', 'custom');
+            applyBackground('custom');
+            document.querySelectorAll('.bg-option').forEach(opt => opt.classList.remove('active'));
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      document.getElementById('btnColorBtn').addEventListener('click', () => {
+        const picker = document.getElementById('btnColorPicker');
+        picker.value = customBtnColor;
+        picker.click();
+      });
+
+      document.getElementById('btnColorPicker').addEventListener('input', (e) => {
+        applyCustomBtnColor(e.target.value);
+      });
+
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        if (confirm('确定要退出登录吗？')) {
+          api.logout();
+        }
+      });
+
+      document.getElementById('rightUserCard').addEventListener('click', () => {
+        if (api.user && api.user.id === currentUserId) return;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    async function loadUserProfile() {
+      try {
+        const result = await api.getUserProfile(currentUserId, currentUserType);
+        if (result.success && result.data) {
+          renderUserProfile(result.data);
+        }
+      } catch (error) {
+        console.error('加载用户资料失败:', error);
+      }
+    }
+
+    function renderUserProfile(user) {
+      const displayName = user.user_type === 'personal'
+        ? user.username
+        : (user.real_name || user.employee_id || '用户');
+      const userTypeText = user.user_type === 'enterprise' ? '企业用户' : '个人用户';
+      const roleText = user.role === 'root' ? '管理员' : userTypeText;
+
+      document.title = `${displayName}的个人主页 - Intelligent Search`;
+
+      const avatar = document.getElementById('profileAvatar');
+      avatar.textContent = displayName.charAt(0).toUpperCase();
+      if (user.user_type === 'enterprise') {
+        avatar.style.background = 'linear-gradient(135deg, #0ea5e9, #6366f1)';
+      }
+
+      document.getElementById('profileTitle').textContent = displayName;
+      document.getElementById('profileBadge').textContent = roleText;
+      document.getElementById('profileJoinTime').textContent = user.created_at ? formatDate(user.created_at) : '-';
+      document.getElementById('authorAvatar').textContent = displayName.charAt(0).toUpperCase();
+      document.getElementById('authorAvatar').style.background = user.user_type === 'enterprise'
+        ? 'linear-gradient(135deg, #0ea5e9, #6366f1)'
+        : 'linear-gradient(135deg, #10b981, #059669)';
+      document.getElementById('authorName').textContent = displayName;
+      document.getElementById('authorRole').textContent = roleText;
+      document.getElementById('contactEmail').textContent = user.email || '-';
+      document.getElementById('authorPostCount').textContent = user.post_count || 0;
+      document.getElementById('authorLikeCount').textContent = user.total_likes || 0;
+
+      if (user.user_type === 'enterprise') {
+        const enterpriseDeptItem = document.getElementById('enterpriseDeptItem');
+        enterpriseDeptItem.style.display = 'inline-flex';
+        document.getElementById('profileDept').textContent = user.department || user.position || '-';
+      }
+    }
+
+    async function loadUserPosts() {
+      const postsList = document.getElementById('postsList');
+      postsList.innerHTML = '<div class="post-item loading">加载中...</div>';
+
+      const sort = currentTab === 'hot' ? 'hot' : 'latest';
+
+      try {
+        const result = await api.getUserPosts(currentUserId, currentUserType, currentPage, 10, sort);
+        if (result.success && result.data) {
+          renderPosts(result.data.list);
+          renderPagination(result.data.total, result.data.pageSize);
+          renderRecentPosts(result.data.list);
+        } else {
+          postsList.innerHTML = '<div class="post-item empty">加载失败</div>';
+        }
+      } catch (error) {
+        postsList.innerHTML = '<div class="post-item empty">加载失败: ' + error.message + '</div>';
+      }
+    }
+
+    function renderPosts(posts) {
+      const postsList = document.getElementById('postsList');
+
+      if (!posts || posts.length === 0) {
+        postsList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📝</div>
+            <p class="empty-text">${currentTab === 'hot' ? '暂无高赞文章' : '暂无发布的文章'}</p>
+          </div>
+        `;
+        return;
+      }
+
+      postsList.innerHTML = posts.map(post => `
+        <div class="profile-post-item" data-id="${post.id}">
+          <div class="post-header-row">
+            <h3 class="post-title">${escapeHtml(post.title)}</h3>
+            ${post.category ? `<span class="post-category">${post.category}</span>` : ''}
+          </div>
+          <p class="post-summary">${escapeHtml(post.summary || (post.content ? post.content.substring(0, 150) : '') + '...')}</p>
+          ${post.tags ? `<div class="post-tags">${post.tags.split(',').filter(t => t).map(tag => `<span class="post-tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
+          <div class="post-footer-row">
+            <span class="post-time">${formatTime(post.created_at)}</span>
+            <div class="post-stats">
+              <span class="stat-item"><span class="stat-icon">👁️</span><span>${post.view_count || 0}</span></span>
+              <span class="stat-item"><span class="stat-icon">❤️</span><span>${post.like_count || 0}</span></span>
+              <span class="stat-item"><span class="stat-icon">💬</span><span>${post.comment_count || 0}</span></span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      postsList.querySelectorAll('.profile-post-item').forEach(item => {
+        item.addEventListener('click', () => {
+          window.location.href = `home.html?postId=${item.dataset.id}`;
+        });
+      });
+    }
+
+    function renderRecentPosts(posts) {
+      const recentList = document.getElementById('recentPostsList');
+      if (!posts || posts.length === 0) {
+        recentList.innerHTML = '<li class="recent-post-item">暂无文章</li>';
+        return;
+      }
+
+      const recentPosts = posts.slice(0, 5);
+      recentList.innerHTML = recentPosts.map(post => `
+        <li class="recent-post-item" data-id="${post.id}">
+          <span class="recent-post-title">${escapeHtml(post.title)}</span>
+          <span class="recent-post-likes">❤️ ${post.like_count || 0}</span>
+        </li>
+      `).join('');
+
+      recentList.querySelectorAll('.recent-post-item').forEach(item => {
+        item.addEventListener('click', () => {
+          window.location.href = `home.html?postId=${item.dataset.id}`;
+        });
+      });
+    }
+
+    function renderPagination(total, pageSize) {
+      const pagination = document.getElementById('postsPagination');
+      totalPages = Math.ceil(total / pageSize);
+
+      if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
+      }
+
+      let html = '';
+      html += `<button class="page-btn ${currentPage === 1 ? 'disabled' : ''}" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 1}">上一页</button>`;
+
+      const maxPages = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
+      let endPage = Math.min(totalPages, startPage + maxPages - 1);
+
+      if (endPage - startPage + 1 < maxPages) {
+        startPage = Math.max(1, endPage - maxPages + 1);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+      }
+
+      html += `<button class="page-btn ${currentPage === totalPages ? 'disabled' : ''}" ${currentPage === totalPages ? 'disabled' : ''} data-page="${currentPage + 1}">下一页</button>`;
+
+      pagination.innerHTML = html;
+
+      pagination.querySelectorAll('.page-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const page = parseInt(btn.dataset.page);
+          if (page >= 1 && page <= totalPages && page !== currentPage) {
+            currentPage = page;
+            loadUserPosts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
+    }
+
+    function formatTime(dateStr) {
+      if (!dateStr) return '-';
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diff = now - date;
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+
+      if (minutes < 1) return '刚刚';
+      if (minutes < 60) return `${minutes}分钟前`;
+      if (hours < 24) return `${hours}小时前`;
+      if (days < 7) return `${days}天前`;
+      return date.toLocaleDateString('zh-CN');
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('zh-CN');
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    init();
+  </script>
+</body>
+</html>

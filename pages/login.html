@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intelligent Search - 登录</title>
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="login-container">
+      <div class="login-header">
+        <h1>Intelligent Search</h1>
+        <p class="subtitle">智能搜索管理平台</p>
+      </div>
+
+      <div class="login-tabs">
+        <button class="tab-btn active" data-tab="enterprise">企业登录</button>
+        <button class="tab-btn" data-tab="personal">个人登录</button>
+      </div>
+
+      <div class="message-box" id="messageBox" style="display: none;"></div>
+
+      <form id="enterpriseLoginForm" class="login-form active">
+        <div class="form-group">
+          <label for="enterpriseEmail">企业邮箱</label>
+          <input type="email" id="enterpriseEmail" name="enterpriseEmail" placeholder="请输入企业邮箱" required>
+        </div>
+
+        <div class="form-group">
+          <label for="employeeId">员工工号</label>
+          <input type="text" id="employeeId" name="employeeId" placeholder="请输入员工工号" required>
+        </div>
+
+        <div class="form-group">
+          <label for="enterprisePassword">登录密码</label>
+          <input type="password" id="enterprisePassword" name="enterprisePassword" placeholder="请输入登录密码" required>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="enterpriseRemember" name="enterpriseRemember">
+            <span>记住我</span>
+          </label>
+          <a href="#" class="forgot-password">忘记密码？</a>
+        </div>
+
+        <button type="submit" class="login-btn enterprise-btn" id="enterpriseLoginBtn">登 录</button>
+      </form>
+
+      <form id="personalLoginForm" class="login-form">
+        <div class="form-group">
+          <label for="personalUsername">用户名</label>
+          <input type="text" id="personalUsername" name="personalUsername" placeholder="请输入用户名" required>
+        </div>
+
+        <div class="form-group">
+          <label for="personalPassword">密码</label>
+          <input type="password" id="personalPassword" name="personalPassword" placeholder="请输入密码" required>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="personalRemember" name="personalRemember">
+            <span>记住我</span>
+          </label>
+          <a href="#" class="forgot-password">忘记密码？</a>
+        </div>
+
+        <button type="submit" class="login-btn" id="personalLoginBtn">登 录</button>
+      </form>
+
+      <div class="register-link">
+        <span id="registerText">还没有企业账户？</span>
+        <a href="#" id="showRegister">立即注册</a>
+      </div>
+
+      <div class="server-status-bar">
+        <div class="server-status" id="serverStatus">
+          <span class="status-dot" id="statusDot"></span>
+          <span class="status-text" id="statusText">正在连接服务器...</span>
+        </div>
+        <a href="#" id="retryServerLink" style="display: none;">重新连接</a>
+      </div>
+
+      <div class="server-connecting-overlay" id="serverConnectingOverlay" style="display: none;">
+        <div class="connecting-box">
+          <div class="connecting-spinner"></div>
+          <div class="connecting-text" id="connectingText">正在搜索服务器...</div>
+          <div class="connecting-progress" id="connectingProgress" style="display: none;">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0%</div>
+          </div>
+        </div>
+      </div>
+
+    <div class="login-container register-container" id="registerContainer" style="display: none;">
+      <div class="login-header">
+        <h1 id="registerTitle">企业注册</h1>
+        <p class="subtitle">创建账户开始使用智能搜索平台</p>
+      </div>
+
+      <div class="login-tabs register-tabs">
+        <button class="tab-btn active" data-register="enterprise">企业注册</button>
+        <button class="tab-btn" data-register="personal">个人注册</button>
+      </div>
+
+      <div class="message-box" id="registerMessageBox" style="display: none;"></div>
+
+      <form id="enterpriseRegisterForm" class="register-form active">
+        <div class="form-section-title">企业信息</div>
+
+        <div class="form-group">
+          <label for="regCompanyName">企业名称</label>
+          <input type="text" id="regCompanyName" name="regCompanyName" placeholder="请输入企业名称" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regCompanyCode">企业编码</label>
+          <input type="text" id="regCompanyCode" name="regCompanyCode" placeholder="请输入企业唯一编码" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="regContactName">联系人</label>
+            <input type="text" id="regContactName" name="regContactName" placeholder="选填">
+          </div>
+          <div class="form-group">
+            <label for="regContactPhone">联系电话</label>
+            <input type="tel" id="regContactPhone" name="regContactPhone" placeholder="选填">
+          </div>
+        </div>
+
+        <div class="form-section-title">管理员账户</div>
+
+        <div class="form-group">
+          <label for="regEmployeeId">员工工号</label>
+          <input type="text" id="regEmployeeId" name="regEmployeeId" placeholder="请输入管理员工号" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regEnterpriseEmail">企业邮箱</label>
+          <input type="email" id="regEnterpriseEmail" name="regEnterpriseEmail" placeholder="请输入企业邮箱" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="regRealName">真实姓名</label>
+            <input type="text" id="regRealName" name="regRealName" placeholder="选填">
+          </div>
+          <div class="form-group">
+            <label for="regDepartment">部门</label>
+            <input type="text" id="regDepartment" name="regDepartment" placeholder="选填">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="regPosition">职位</label>
+          <input type="text" id="regPosition" name="regPosition" placeholder="选填">
+        </div>
+
+        <div class="form-group">
+          <label for="regEnterprisePassword">设置密码</label>
+          <input type="password" id="regEnterprisePassword" name="regEnterprisePassword" placeholder="请输入密码（至少6位）" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regEnterpriseConfirmPassword">确认密码</label>
+          <input type="password" id="regEnterpriseConfirmPassword" name="regEnterpriseConfirmPassword" placeholder="请再次输入密码" required>
+        </div>
+
+        <button type="submit" class="login-btn enterprise-btn" id="enterpriseRegisterBtn">注 册 企 业</button>
+      </form>
+
+      <form id="personalRegisterForm" class="register-form">
+        <div class="form-group">
+          <label for="regPersonalUsername">用户名</label>
+          <input type="text" id="regPersonalUsername" name="regPersonalUsername" placeholder="请输入用户名" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regPersonalEmail">邮箱（选填）</label>
+          <input type="email" id="regPersonalEmail" name="regPersonalEmail" placeholder="请输入邮箱">
+        </div>
+
+        <div class="form-group">
+          <label for="regPersonalPassword">设置密码</label>
+          <input type="password" id="regPersonalPassword" name="regPersonalPassword" placeholder="请输入密码（至少6位）" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regPersonalConfirmPassword">确认密码</label>
+          <input type="password" id="regPersonalConfirmPassword" name="regPersonalConfirmPassword" placeholder="请再次输入密码" required>
+        </div>
+
+        <button type="submit" class="login-btn" id="personalRegisterBtn">注 册</button>
+      </form>
+
+      <div class="register-link">
+        已有账户？<a href="#" id="showLogin">返回登录</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const isElectron = !!window.electronAPI;
+    const API_BASE = isElectron ? null : '/api';
+
+    const api = {
+      token: localStorage.getItem('token') || '',
+      user: JSON.parse(localStorage.getItem('user') || 'null'),
+
+      setAuth(token, user) {
+        this.token = token;
+        this.user = user;
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+      },
+
+      async request(path, options = {}) {
+        const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+        if (this.token) {
+          headers['Authorization'] = `Bearer ${this.token}`;
+        }
+        const response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+        return await response.json();
+      },
+      personalLogin(username, password) {
+        if (isElectron) return window.electronAPI.personalLogin(username, password);
+        return this.request('/auth/personal/login', {
+          method: 'POST',
+          body: JSON.stringify({ username, password })
+        });
+      },
+      personalRegister(username, password, email) {
+        if (isElectron) return window.electronAPI.personalRegister(username, password, email);
+        return this.request('/auth/personal/register', {
+          method: 'POST',
+          body: JSON.stringify({ username, password, email })
+        });
+      },
+      enterpriseLogin(email, employeeId, password) {
+        if (isElectron) return window.electronAPI.enterpriseLogin(email, employeeId, password);
+        return this.request('/auth/enterprise/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, employeeId, password })
+        });
+      },
+      enterpriseRegister(data) {
+        if (isElectron) return window.electronAPI.enterpriseRegister(data);
+        return this.request('/auth/enterprise/register', {
+          method: 'POST',
+          body: JSON.stringify(data)
+        });
+      }
+    };
+
+    const loginTabs = document.querySelectorAll('.login-tabs .tab-btn');
+    const loginForms = document.querySelectorAll('.login-form');
+    const registerTabs = document.querySelectorAll('.register-tabs .tab-btn');
+    const registerForms = document.querySelectorAll('.register-form');
+    const loginContainer = document.querySelector('.login-container:not(.register-container)');
+    const registerContainer = document.getElementById('registerContainer');
+    const showRegister = document.getElementById('showRegister');
+    const showLogin = document.getElementById('showLogin');
+    const messageBox = document.getElementById('messageBox');
+    const registerMessageBox = document.getElementById('registerMessageBox');
+    const registerText = document.getElementById('registerText');
+    const registerTitle = document.getElementById('registerTitle');
+
+    let currentLoginType = 'enterprise';
+
+    function showMessage(element, message, type = 'error') {
+      element.textContent = message;
+      element.className = 'message-box ' + type;
+      element.style.display = 'block';
+      setTimeout(() => {
+        element.style.display = 'none';
+      }, 3000);
+    }
+
+    loginTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabType = tab.dataset.tab;
+        currentLoginType = tabType;
+
+        loginTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        loginForms.forEach(f => f.classList.remove('active'));
+        document.getElementById(tabType + 'LoginForm').classList.add('active');
+
+        if (tabType === 'enterprise') {
+          registerText.textContent = '还没有企业账户？';
+        } else {
+          registerText.textContent = '还没有个人账户？';
+        }
+      });
+    });
+
+    registerTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabType = tab.dataset.register;
+
+        registerTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        registerForms.forEach(f => f.classList.remove('active'));
+        document.getElementById(tabType + 'RegisterForm').classList.add('active');
+
+        if (tabType === 'enterprise') {
+          registerTitle.textContent = '企业注册';
+        } else {
+          registerTitle.textContent = '个人注册';
+        }
+      });
+    });
+
+    showRegister.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginContainer.style.display = 'none';
+      registerContainer.style.display = 'block';
+
+      if (currentLoginType === 'enterprise') {
+        document.querySelector('[data-register="enterprise"]').click();
+      } else {
+        document.querySelector('[data-register="personal"]').click();
+      }
+    });
+
+    showLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      registerContainer.style.display = 'none';
+      loginContainer.style.display = 'block';
+    });
+
+    document.getElementById('enterpriseLoginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('enterpriseEmail').value;
+      const employeeId = document.getElementById('employeeId').value;
+      const password = document.getElementById('enterprisePassword').value;
+      const btn = document.getElementById('enterpriseLoginBtn');
+
+      if (!email || !employeeId || !password) {
+        showMessage(messageBox, '请填写完整的登录信息');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '登录中...';
+
+      try {
+        const result = await api.enterpriseLogin(email, employeeId, password);
+
+        if (result.success) {
+          api.setAuth(result.data.token, result.data.user);
+          showMessage(messageBox, '登录成功！正在跳转...', 'success');
+          setTimeout(() => {
+            window.location.href = 'home.html';
+          }, 800);
+        } else {
+          showMessage(messageBox, result.message || '登录失败');
+        }
+      } catch (error) {
+        showMessage(messageBox, '登录异常: ' + error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '登 录';
+      }
+    });
+
+    document.getElementById('personalLoginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('personalUsername').value;
+      const password = document.getElementById('personalPassword').value;
+      const btn = document.getElementById('personalLoginBtn');
+
+      if (!username || !password) {
+        showMessage(messageBox, '请输入用户名和密码');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '登录中...';
+
+      try {
+        const result = await api.personalLogin(username, password);
+
+        if (result.success) {
+          api.setAuth(result.data.token, result.data.user);
+          showMessage(messageBox, '登录成功！正在跳转...', 'success');
+          setTimeout(() => {
+            window.location.href = 'home.html';
+          }, 800);
+        } else {
+          showMessage(messageBox, result.message || '登录失败');
+        }
+      } catch (error) {
+        showMessage(messageBox, '登录异常: ' + error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '登 录';
+      }
+    });
+
+    document.getElementById('enterpriseRegisterForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const companyName = document.getElementById('regCompanyName').value;
+      const companyCode = document.getElementById('regCompanyCode').value;
+      const contactName = document.getElementById('regContactName').value;
+      const contactPhone = document.getElementById('regContactPhone').value;
+      const employeeId = document.getElementById('regEmployeeId').value;
+      const email = document.getElementById('regEnterpriseEmail').value;
+      const realName = document.getElementById('regRealName').value;
+      const department = document.getElementById('regDepartment').value;
+      const position = document.getElementById('regPosition').value;
+      const password = document.getElementById('regEnterprisePassword').value;
+      const confirmPassword = document.getElementById('regEnterpriseConfirmPassword').value;
+      const btn = document.getElementById('enterpriseRegisterBtn');
+
+      if (!companyName || !companyCode || !employeeId || !email || !password) {
+        showMessage(registerMessageBox, '请填写必填项');
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage(registerMessageBox, '密码长度不能少于6位');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage(registerMessageBox, '两次输入的密码不一致');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '注册中...';
+
+      try {
+        const result = await api.enterpriseRegister({
+          companyName, companyCode, contactName, contactPhone,
+          employeeId, email, realName, department, position, password
+        });
+
+        if (result.success) {
+          showMessage(registerMessageBox, '注册成功！正在跳转登录...', 'success');
+          setTimeout(() => {
+            registerContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+            document.querySelector('[data-tab="enterprise"]').click();
+            document.getElementById('enterpriseEmail').value = email;
+            document.getElementById('employeeId').value = employeeId;
+            showMessage(messageBox, '注册成功，请登录', 'success');
+          }, 1500);
+        } else {
+          showMessage(registerMessageBox, result.message || '注册失败');
+        }
+      } catch (error) {
+        showMessage(registerMessageBox, '注册异常: ' + error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '注 册 企 业';
+      }
+    });
+
+    document.getElementById('personalRegisterForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('regPersonalUsername').value;
+      const email = document.getElementById('regPersonalEmail').value;
+      const password = document.getElementById('regPersonalPassword').value;
+      const confirmPassword = document.getElementById('regPersonalConfirmPassword').value;
+      const btn = document.getElementById('personalRegisterBtn');
+
+      if (!username || !password) {
+        showMessage(registerMessageBox, '请输入用户名和密码');
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage(registerMessageBox, '密码长度不能少于6位');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage(registerMessageBox, '两次输入的密码不一致');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '注册中...';
+
+      try {
+        const result = await api.personalRegister(username, password, email);
+
+        if (result.success) {
+          showMessage(registerMessageBox, '注册成功！正在跳转登录...', 'success');
+          setTimeout(() => {
+            registerContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+            document.querySelector('[data-tab="personal"]').click();
+            document.getElementById('personalUsername').value = username;
+            showMessage(messageBox, '注册成功，请登录', 'success');
+          }, 1500);
+        } else {
+          showMessage(registerMessageBox, result.message || '注册失败');
+        }
+      } catch (error) {
+        showMessage(registerMessageBox, '注册异常: ' + error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '注 册';
+      }
+    });
+
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const retryServerLink = document.getElementById('retryServerLink');
+    const serverConnectingOverlay = document.getElementById('serverConnectingOverlay');
+    const connectingText = document.getElementById('connectingText');
+    const connectingProgress = document.getElementById('connectingProgress');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+
+    function updateServerStatus(status, message) {
+      statusText.textContent = message;
+      
+      statusDot.className = 'status-dot';
+      if (status === 'connected') {
+        statusDot.classList.add('status-connected');
+        statusText.style.color = '#4ade80';
+        retryServerLink.style.display = 'none';
+      } else if (status === 'failed') {
+        statusDot.classList.add('status-failed');
+        statusText.style.color = '#f87171';
+        retryServerLink.style.display = 'inline';
+      } else if (status === 'connecting' || status === 'scanning') {
+        statusDot.classList.add('status-connecting');
+        statusText.style.color = '#fbbf24';
+        retryServerLink.style.display = 'none';
+      } else {
+        statusText.style.color = 'rgba(255, 255, 255, 0.7)';
+        retryServerLink.style.display = 'none';
+      }
+
+      if (status === 'connecting' || status === 'scanning') {
+        serverConnectingOverlay.style.display = 'flex';
+        connectingText.textContent = message;
+        if (status === 'scanning') {
+          connectingProgress.style.display = 'block';
+        } else {
+          connectingProgress.style.display = 'none';
+        }
+      } else {
+        serverConnectingOverlay.style.display = 'none';
+      }
+    }
+
+    if (isElectron) {
+      window.electronAPI.onServerStatus((data) => {
+        updateServerStatus(data.status, data.message);
+      });
+
+      window.electronAPI.onScanProgress((data) => {
+        const percent = Math.round((data.scanned / data.total) * 100);
+        if (progressFill) progressFill.style.width = percent + '%';
+        if (progressText) progressText.textContent = `${percent}% (已发现 ${data.found} 个)`;
+      });
+
+      (async () => {
+        try {
+          const result = await window.electronAPI.getServerStatus();
+          if (result.success) {
+            updateServerStatus(result.data.status, result.data.message);
+          }
+        } catch (e) {}
+      })();
+
+      retryServerLink.addEventListener('click', async (e) => {
+        e.preventDefault();
+        retryServerLink.style.display = 'none';
+        try {
+          await window.electronAPI.reconnectServer();
+        } catch (error) {
+          updateServerStatus('failed', '重新连接失败');
+        }
+      });
+    } else {
+      updateServerStatus('connected', '服务器已连接');
+    }
+  </script>
+</body>
+</html>

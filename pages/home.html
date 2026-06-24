@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intelligent Search - 首页</title>
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+  <input type="file" id="bgUploadInput" accept="image/*" style="display: none;">
+  <input type="color" id="btnColorPicker" style="display: none;">
+
+  <div class="app-container">
+    <main class="app-main">
+      <aside class="sidebar left-sidebar">
+        <div class="sidebar-section nav-hot-section">
+          <h3 class="sidebar-title">导航</h3>
+          <ul class="nav-list">
+            <li class="nav-item active" data-nav="posts">
+              <span class="nav-icon">📝</span>
+              <span class="nav-text">帖子</span>
+            </li>
+            <li class="nav-item" data-nav="category">
+              <span class="nav-icon">📂</span>
+              <span class="nav-text">分类</span>
+            </li>
+            <li class="nav-item" data-nav="collection">
+              <span class="nav-icon">⭐</span>
+              <span class="nav-text">收藏</span>
+            </li>
+            <li class="nav-item" data-nav="history">
+              <span class="nav-icon">🕐</span>
+              <span class="nav-text">历史</span>
+            </li>
+          </ul>
+
+          <div class="category-section-inner" id="categorySection" style="display: none;">
+            <h3 class="sidebar-title sub-title">分类导航</h3>
+            <ul class="category-list">
+              <li class="category-item active" data-category="">
+                <span class="category-icon">📋</span>
+                <span class="category-name">全部</span>
+              </li>
+              <li class="category-item" data-category="技术">
+                <span class="category-icon">💻</span>
+                <span class="category-name">技术</span>
+              </li>
+              <li class="category-item" data-category="企业">
+                <span class="category-icon">🏢</span>
+                <span class="category-name">企业</span>
+              </li>
+              <li class="category-item" data-category="设计">
+                <span class="category-icon">🎨</span>
+                <span class="category-name">设计</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <h3 class="sidebar-title">热门帖子</h3>
+          <ul class="hot-list" id="hotList">
+            <li class="hot-item loading">加载中...</li>
+          </ul>
+        </div>
+
+        
+      </aside>
+
+      <div class="divider vertical-divider"></div>
+
+      <section class="content">
+        <div class="content-top-bar">
+          <div class="search-capsule">
+            <div class="search-capsule-inner">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="searchInput" placeholder="搜索帖子、文章、资讯..." class="search-capsule-input">
+              <button id="searchBtn" class="search-capsule-btn">搜索</button>
+            </div>
+          </div>
+          <div class="filter-capsules">
+            <span class="filter-capsule active" data-filter="latest">最新</span>
+            <span class="filter-capsule" data-filter="hot">热门</span>
+          </div>
+        </div>
+
+        <div class="post-detail-container" id="postDetailContainer" style="display: none;">
+          <div class="post-detail-header">
+            <button class="back-to-list-btn" id="backToListBtn">
+              <span>←</span>
+              <span>返回列表</span>
+            </button>
+          </div>
+          <div class="post-detail-article">
+            <h1 class="post-detail-title" id="detailTitle"></h1>
+            <div class="post-detail-meta" id="detailMeta"></div>
+            <div class="post-detail-actions">
+              <button class="detail-action-btn like-action-btn" id="detailLikeBtn">
+                <span class="action-icon" id="detailLikeIcon">🤍</span>
+                <span class="action-text" id="detailLikeText">点赞</span>
+                <span class="action-count" id="detailLikeCount">0</span>
+              </button>
+              <button class="detail-action-btn">
+                <span class="action-icon">💬</span>
+                <span class="action-text">评论</span>
+                <span class="action-count" id="detailCommentCount">0</span>
+              </button>
+              <button class="detail-action-btn">
+                <span class="action-icon">👁️</span>
+                <span class="action-text">浏览</span>
+                <span class="action-count" id="detailViewCount">0</span>
+              </button>
+            </div>
+            <div class="post-detail-content" id="detailContent"></div>
+          </div>
+
+          <div class="comments-section">
+            <h3 class="comments-title">评论 <span id="commentsCountLabel">(0)</span></h3>
+            <div class="comment-input-area">
+              <textarea id="commentInput" placeholder="写下你的评论..." class="comment-textarea"></textarea>
+              <div class="comment-submit-row">
+                <button id="submitCommentBtn" class="submit-comment-btn">发表评论</button>
+              </div>
+            </div>
+            <div class="comments-list" id="commentsList">
+              <div class="comment-item loading">加载评论中...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="post-list" id="postList">
+          <div class="post-item loading">加载中...</div>
+        </div>
+
+        <div class="pagination" id="pagination">
+        </div>
+
+        <div class="panel-overlay publish-panel" id="publishPanel" style="display: none;">
+          <div class="panel-container">
+            <div class="panel-header">
+              <h2>发布文章</h2>
+              <button class="panel-close" id="publishPanelClose">&times;</button>
+            </div>
+            <div class="panel-body">
+              <div class="form-group">
+                <label class="form-label">标题</label>
+                <input type="text" id="publishTitle" placeholder="请输入文章标题" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">分类</label>
+                <select id="publishCategory" class="form-select">
+                  <option value="技术">技术</option>
+                  <option value="企业">企业</option>
+                  <option value="设计">设计</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">标签（用逗号分隔）</label>
+                <input type="text" id="publishTags" placeholder="如：技术,分享,教程" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">内容</label>
+                <textarea id="publishContent" placeholder="请输入文章内容..." class="form-textarea"></textarea>
+              </div>
+            </div>
+            <div class="panel-footer">
+              <button class="cancel-btn" id="cancelPublishBtn">取消</button>
+              <button class="confirm-btn" id="confirmPublishBtn">发布</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-overlay message-panel" id="messagePanel" style="display: none;">
+          <div class="panel-container message-panel-container">
+            <div class="panel-header">
+              <h2>消息</h2>
+              <div class="panel-header-actions">
+                <button class="panel-action-btn" id="messagePublishBtn" title="发布文章">
+                  <span>✏️</span>
+                  <span>发布</span>
+                </button>
+                <button class="panel-close" id="messagePanelClose">&times;</button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="message-tabs">
+                <span class="message-tab active" data-type="all">全部</span>
+                <span class="message-tab" data-type="comment">评论</span>
+                <span class="message-tab" data-type="like">点赞</span>
+                <span class="message-tab" data-type="system">系统</span>
+              </div>
+              <div class="message-list" id="messageList">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider vertical-divider"></div>
+
+      <aside class="sidebar right-sidebar">
+        <div class="sidebar-section user-action-section">
+          <div class="user-card-compact">
+            <div class="user-avatar-large" id="userAvatarLarge">U</div>
+            <div class="user-info-text">
+              <span class="user-name-large" id="userNameLarge">用户</span>
+              <span class="user-role" id="userRole">普通用户</span>
+            </div>
+          </div>
+          <div class="action-buttons-inline">
+            <button class="action-btn primary" id="publishBtn">
+              <span class="action-icon">✏️</span>
+              <span class="action-text">发布文章</span>
+            </button>
+            <button class="action-btn" id="messageBtn">
+              <span class="action-icon">💬</span>
+              <span class="action-text">消息</span>
+              <span class="badge message-badge" style="display: none;">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-section settings-section">
+          <h3 class="sidebar-title">设置</h3>
+          <div class="settings-buttons">
+            <button class="settings-btn" id="themeToggleBtn">
+              <span class="settings-icon">🌓</span>
+              <span class="settings-text">深色/浅色模式</span>
+              <span class="settings-status" id="themeStatus">浅色</span>
+            </button>
+            <button class="settings-btn" id="bgToggleBtn">
+              <span class="settings-icon">🖼️</span>
+              <span class="settings-text">更换背景</span>
+            </button>
+            <div class="background-options-section" id="bgOptionsSection" style="display: none;">
+              <div class="bg-options-grid">
+                <div class="bg-option active" data-bg="default" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                  <span class="bg-option-name">默认</span>
+                </div>
+                <div class="bg-option" data-bg="sunset" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                  <span class="bg-option-name">晚霞</span>
+                </div>
+                <div class="bg-option" data-bg="ocean" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                  <span class="bg-option-name">海洋</span>
+                </div>
+                <div class="bg-option" data-bg="forest" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
+                  <span class="bg-option-name">森林</span>
+                </div>
+              </div>
+              <div class="bg-upload-section">
+                <button class="bg-upload-btn" id="bgUploadBtn">
+                  <span>📤</span>
+                  <span>上传自定义背景</span>
+                </button>
+              </div>
+            </div>
+            <button class="settings-btn" id="btnColorBtn">
+              <span class="settings-icon">🎨</span>
+              <span class="settings-text">主题色按钮</span>
+              <span class="settings-color-dot" id="btnColorDot"></span>
+            </button>
+            <button class="settings-btn logout-btn" id="logoutBtn">
+              <span class="settings-icon">🚪</span>
+              <span class="settings-text">退出登录</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-section profile-recent-section">
+          <h3 class="sidebar-title">我的</h3>
+          <div class="profile-stats">
+            <div class="stat-item">
+              <span class="stat-number" id="postCount">0</span>
+              <span class="stat-label">帖子</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">128</span>
+              <span class="stat-label">关注</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">256</span>
+              <span class="stat-label">粉丝</span>
+            </div>
+          </div>
+          <div class="section-divider"></div>
+          <h3 class="sidebar-title sub-title">最近浏览</h3>
+          <ul class="recent-list" id="recentList">
+            <li class="recent-item loading">加载中...</li>
+          </ul>
+        </div>
+      </aside>
+    </main>
+
+    <div class="profile-modal" id="profileModal" style="display: none;">
+      <div class="modal-overlay" id="profileModalOverlay"></div>
+      <div class="modal-content profile-modal-content">
+        <div class="modal-header">
+          <h2>用户简介</h2>
+          <button class="modal-close" id="profileModalClose">&times;</button>
+        </div>
+        <div class="modal-body" id="profileBody">
+          <div class="profile-loading">加载中...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-modal" id="settingsModal" style="display: none;">
+      <div class="modal-overlay" id="settingsModalOverlay"></div>
+      <div class="modal-content settings-modal-content">
+        <div class="modal-header">
+          <h2>个人中心</h2>
+          <button class="modal-close" id="settingsModalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="settings-profile-header">
+            <div class="settings-avatar" id="settingsAvatar">U</div>
+            <div class="settings-profile-info">
+              <div class="settings-name" id="settingsName">用户</div>
+              <div class="settings-role-badge" id="settingsRoleBadge">个人用户</div>
+            </div>
+          </div>
+
+          <div class="settings-stats">
+            <div class="settings-stat-item">
+              <div class="settings-stat-num" id="settingsPostCount">0</div>
+              <div class="settings-stat-label">帖子</div>
+            </div>
+            <div class="settings-stat-item">
+              <div class="settings-stat-num">128</div>
+              <div class="settings-stat-label">关注</div>
+            </div>
+            <div class="settings-stat-item">
+              <div class="settings-stat-num">256</div>
+              <div class="settings-stat-label">粉丝</div>
+            </div>
+            <div class="settings-stat-item">
+              <div class="settings-stat-num" id="settingsLikeCount">0</div>
+              <div class="settings-stat-label">获赞</div>
+            </div>
+          </div>
+
+          <div class="settings-tabs">
+            <span class="settings-tab active" data-tab="info">基本信息</span>
+            <span class="settings-tab" data-tab="security">账号安全</span>
+          </div>
+          <div class="settings-content" id="settingsContent">
+            <div class="settings-info" id="settingsInfo">
+              <div class="form-group">
+                <label>用户名</label>
+                <input type="text" id="settingsUsername" readonly>
+              </div>
+              <div class="form-group">
+                <label>邮箱</label>
+                <input type="email" id="settingsEmail" placeholder="请输入邮箱">
+              </div>
+              <div class="form-group">
+                <label>用户类型</label>
+                <input type="text" id="settingsUserType" readonly>
+              </div>
+              <div class="form-group" id="enterpriseInfoGroup" style="display: none;">
+                <label>工号</label>
+                <input type="text" id="settingsEmployeeId" readonly>
+              </div>
+              <div class="form-group" id="enterpriseDeptGroup" style="display: none;">
+                <label>部门</label>
+                <input type="text" id="settingsDepartment" readonly>
+              </div>
+              <div class="form-group" id="enterprisePosGroup" style="display: none;">
+                <label>职位</label>
+                <input type="text" id="settingsPosition" readonly>
+              </div>
+              <button class="btn-primary" id="saveSettingsBtn">保存修改</button>
+            </div>
+            <div class="settings-security" id="settingsSecurity" style="display: none;">
+              <div class="security-item">
+                <div class="security-info">
+                  <div class="security-title">登录密码</div>
+                  <div class="security-desc">定期修改密码可提高账号安全性</div>
+                </div>
+                <button class="btn-secondary" id="changePasswordBtn">修改密码</button>
+              </div>
+              <div class="security-item">
+                <div class="security-info">
+                  <div class="security-title">邮箱验证</div>
+                  <div class="security-desc" id="emailVerifyStatus">已验证</div>
+                </div>
+                <span class="security-status verified">已验证</span>
+              </div>
+              <div class="security-item">
+                <div class="security-info">
+                  <div class="security-title">注册时间</div>
+                  <div class="security-desc" id="registerTime">-</div>
+                </div>
+              </div>
+              <div class="logout-section">
+                <button class="logout-btn" id="settingsLogoutBtn">退出登录</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const isElectron = !!window.electronAPI;
+    const API_BASE = isElectron ? null : '/api';
+
+    const api = {
+      token: localStorage.getItem('token') || '',
+      user: JSON.parse(localStorage.getItem('user') || 'null'),
+
+      setAuth(token, user) {
+        this.token = token;
+        this.user = user;
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+      },
+
+      clearAuth() {
+        this.token = '';
+        this.user = null;
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      },
+
+      async request(path, options = {}) {
+        const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+        if (this.token) {
+          headers['Authorization'] = `Bearer ${this.token}`;
+        }
+        if (isElectron) {
+          return await this.electronRequest(path, options);
+        }
+        const response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+        return await response.json();
+      },
+
+      async electronRequest(path, options = {}) {
+        const method = options.method || 'GET';
+        const body = options.body ? JSON.parse(options.body) : {};
+        const params = new URLSearchParams();
+        
+        if (method === 'GET' && body && Object.keys(body).length > 0) {
+          for (const [key, value] of Object.entries(body)) {
+            if (value !== undefined && value !== null) {
+              params.append(key, value);
+            }
+          }
+        }
+
+        if (path.includes('/posts/list') || path.includes('/posts/search')) {
+          const queryStr = params.toString();
+          const fullPath = queryStr ? `${path}?${queryStr}` : path;
+          return await window.electronAPI.getPosts(method === 'GET' ? fullPath : path, method, body);
+        }
+        if (path.startsWith('/posts/hot')) {
+          return await window.electronAPI.getHotPosts();
+        }
+        if (path.match(/\/posts\/detail\/\d+/)) {
+          const id = path.split('/').pop();
+          return await window.electronAPI.getPostDetail(id);
+        }
+        if (path === '/api/posts/create' || path === '/posts/create') {
+          return await window.electronAPI.createPost(body);
+        }
+        return { success: false, message: '接口未实现' };
+      },
+
+      getPosts(page = 1, pageSize = 10, keyword = '', category = '') {
+        if (isElectron) {
+          return window.electronAPI.getPostList(page, pageSize, keyword, category);
+        }
+        let path = '/posts/list?';
+        const params = new URLSearchParams({ page, pageSize });
+        if (keyword) params.append('keyword', keyword);
+        if (category) params.append('category', category);
+        return this.request(`/posts/list?${params.toString()}`);
+      },
+
+      searchPosts(keyword, page = 1, pageSize = 10) {
+        if (isElectron) {
+          return window.electronAPI.searchPosts(keyword, page, pageSize);
+        }
+        return this.request(`/posts/search?keyword=${encodeURIComponent(keyword)}&page=${page}&pageSize=${pageSize}`);
+      },
+
+      getHotPosts(limit = 10) {
+        if (isElectron) {
+          return window.electronAPI.getHotPosts(limit);
+        }
+        return this.request(`/posts/hot?limit=${limit}`);
+      },
+
+      getPostDetail(id) {
+        if (isElectron) {
+          return window.electronAPI.getPostDetail(id);
+        }
+        return this.request(`/posts/detail/${id}`);
+      },
+
+      createPost(data) {
+        return this.request('/posts/create', {
+          method: 'POST',
+          body: JSON.stringify(data)
+        });
+      },
+
+      likePost(id) {
+        if (isElectron) {
+          return window.electronAPI.likePost(id);
+        }
+        return this.request(`/posts/${id}/like`, {
+          method: 'POST'
+        });
+      },
+
+      getLikeStatus(id) {
+        if (isElectron) {
+          return window.electronAPI.getLikeStatus(id);
+        }
+        return this.request(`/posts/${id}/like/status`);
+      },
+
+      getComments(postId, page = 1, pageSize = 20) {
+        if (isElectron) {
+          return window.electronAPI.getComments(postId, page, pageSize);
+        }
+        return this.request(`/posts/${postId}/comments?page=${page}&pageSize=${pageSize}`);
+      },
+
+      createComment(postId, content, parentId = 0) {
+        if (isElectron) {
+          return window.electronAPI.createComment(postId, content, parentId);
+        }
+        return this.request(`/posts/${postId}/comments`, {
+          method: 'POST',
+          body: JSON.stringify({ content, parent_id: parentId })
+        });
+      },
+
+      deleteComment(id) {
+        if (isElectron) {
+          return window.electronAPI.deleteComment(id);
+        }
+        return this.request(`/posts/comments/${id}`, {
+          method: 'DELETE'
+        });
+      },
+
+      getUserProfile(userId, userType) {
+        return this.request(`/user/profile?userId=${userId}&userType=${userType}`);
+      },
+
+      getMessages(page = 1, pageSize = 20, type = 'all') {
+        return this.request(`/messages/list?page=${page}&pageSize=${pageSize}&type=${type}`);
+      },
+
+      getUnreadCount() {
+        return this.request('/messages/unread-count');
+      },
+
+      markAllMessagesRead() {
+        return this.request('/messages/read-all', { method: 'POST' });
+      },
+
+      getHistoryList(page = 1, pageSize = 10) {
+        return this.request(`/history/list?page=${page}&pageSize=${pageSize}`);
+      },
+
+      updateProfile(data) {
+        return this.request('/user/profile/update', {
+          method: 'PUT',
+          body: JSON.stringify(data)
+        });
+      },
+
+      logout() {
+        this.clearAuth();
+        window.location.href = 'login.html';
+      }
+    };
+
+    let currentPage = 1;
+    let currentKeyword = '';
+    let currentCategory = '';
+    let totalPages = 1;
+    let currentPost = null;
+    let currentFilter = 'latest';
+    let currentPostId = null;
+    let isLiked = false;
+
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const postList = document.getElementById('postList');
+    const hotList = document.getElementById('hotList');
+    const pagination = document.getElementById('pagination');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const categoryItems = document.querySelectorAll('.category-item');
+    const filterCapsules = document.querySelectorAll('.filter-capsule');
+    const navItems = document.querySelectorAll('.nav-item');
+    const categorySection = document.getElementById('categorySection');
+    
+    const postDetailContainer = document.getElementById('postDetailContainer');
+    const backToListBtn = document.getElementById('backToListBtn');
+    const detailTitle = document.getElementById('detailTitle');
+    const detailMeta = document.getElementById('detailMeta');
+    const detailContent = document.getElementById('detailContent');
+    const detailLikeBtn = document.getElementById('detailLikeBtn');
+    const detailLikeIcon = document.getElementById('detailLikeIcon');
+    const detailLikeText = document.getElementById('detailLikeText');
+    const detailLikeCount = document.getElementById('detailLikeCount');
+    const detailCommentCount = document.getElementById('detailCommentCount');
+    const detailViewCount = document.getElementById('detailViewCount');
+    
+    const commentsList = document.getElementById('commentsList');
+    const commentInput = document.getElementById('commentInput');
+    const submitCommentBtn = document.getElementById('submitCommentBtn');
+    const commentsCountLabel = document.getElementById('commentsCountLabel');
+
+    const publishBtn = document.getElementById('publishBtn');
+    const publishPanel = document.getElementById('publishPanel');
+    const publishPanelClose = document.getElementById('publishPanelClose');
+    const cancelPublishBtn = document.getElementById('cancelPublishBtn');
+    const confirmPublishBtn = document.getElementById('confirmPublishBtn');
+
+    const messageBtn = document.getElementById('messageBtn');
+    const messagePanel = document.getElementById('messagePanel');
+    const messagePanelClose = document.getElementById('messagePanelClose');
+    const messageList = document.getElementById('messageList');
+
+    const profileModal = document.getElementById('profileModal');
+    const profileModalOverlay = document.getElementById('profileModalOverlay');
+    const profileModalClose = document.getElementById('profileModalClose');
+    const profileBody = document.getElementById('profileBody');
+
+    const settingsModal = document.getElementById('settingsModal');
+    const settingsModalOverlay = document.getElementById('settingsModalOverlay');
+    const settingsModalClose = document.getElementById('settingsModalClose');
+    const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+    const settingsTabs = document.querySelectorAll('.settings-tab');
+    const settingsInfo = document.getElementById('settingsInfo');
+    const settingsSecurity = document.getElementById('settingsSecurity');
+    const settingsLogoutBtn = document.getElementById('settingsLogoutBtn');
+
+    const recentList = document.querySelector('.recent-list');
+    const userCardCompact = document.querySelector('.user-card-compact');
+
+    function init() {
+      if (!api.user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      updateUserInfo();
+      loadPosts();
+      loadHotPosts();
+      loadHistory();
+      loadUnreadCount();
+      bindEvents();
+    }
+
+    function updateUserInfo() {
+      const user = api.user;
+      if (user) {
+        const displayName = user.userType === 'personal' 
+          ? user.username 
+          : (user.real_name || user.employee_id || user.email);
+        
+        document.getElementById('userNameLarge').textContent = displayName;
+        const avatarLarge = document.getElementById('userAvatarLarge');
+        avatarLarge.textContent = displayName.charAt(0).toUpperCase();
+
+        const roleText = user.userType === 'enterprise' ? '企业用户' : '个人用户';
+        if (user.role === 'root') {
+          document.getElementById('userRole').textContent = '管理员';
+        } else {
+          document.getElementById('userRole').textContent = roleText;
+        }
+
+        if (user.userType === 'enterprise') {
+          avatarLarge.style.background = 'linear-gradient(135deg, #0ea5e9, #6366f1)';
+        }
+      }
+    }
+
+    function bindEvents() {
+      searchBtn.addEventListener('click', handleSearch);
+      searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSearch();
+      });
+
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          navItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          const nav = item.dataset.nav;
+          
+          if (nav === 'category') {
+            categorySection.style.display = 'block';
+          } else {
+            categorySection.style.display = 'none';
+          }
+        });
+      });
+
+      categoryItems.forEach(item => {
+        item.addEventListener('click', () => {
+          categoryItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          currentCategory = item.dataset.category;
+          currentPage = 1;
+          showPostList();
+          loadPosts();
+        });
+      });
+
+      filterCapsules.forEach(item => {
+        item.addEventListener('click', () => {
+          filterCapsules.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          currentFilter = item.dataset.filter;
+          showPostList();
+          loadPosts();
+        });
+      });
+
+      logoutBtn.addEventListener('click', () => {
+        api.logout();
+      });
+
+      backToListBtn.addEventListener('click', showPostList);
+
+      detailLikeBtn.addEventListener('click', handleLike);
+      submitCommentBtn.addEventListener('click', handleSubmitComment);
+
+      publishBtn.addEventListener('click', () => {
+        publishPanel.style.display = 'flex';
+      });
+      publishPanel.addEventListener('click', (e) => {
+        if (e.target === publishPanel) {
+          publishPanel.style.display = 'none';
+        }
+      });
+      publishPanelClose.addEventListener('click', () => {
+        publishPanel.style.display = 'none';
+      });
+      cancelPublishBtn.addEventListener('click', () => {
+        publishPanel.style.display = 'none';
+      });
+      confirmPublishBtn.addEventListener('click', handlePublish);
+
+      messageBtn.addEventListener('click', () => {
+        messagePanel.style.display = 'flex';
+        loadMessages();
+      });
+      messagePanel.addEventListener('click', (e) => {
+        if (e.target === messagePanel) {
+          messagePanel.style.display = 'none';
+        }
+      });
+      messagePanelClose.addEventListener('click', () => {
+        messagePanel.style.display = 'none';
+      });
+
+      document.getElementById('messagePublishBtn').addEventListener('click', () => {
+        messagePanel.style.display = 'none';
+        publishPanel.style.display = 'flex';
+      });
+
+      // 消息 tab 切换
+      let currentMessageType = 'all';
+      const messageTabs = document.querySelectorAll('.message-tab');
+      messageTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          messageTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentMessageType = tab.dataset.type;
+          loadMessagesByType(currentMessageType);
+        });
+      });
+
+      profileModalOverlay.addEventListener('click', () => {
+        profileModal.style.display = 'none';
+        document.body.style.overflow = '';
+      });
+      profileModalClose.addEventListener('click', () => {
+        profileModal.style.display = 'none';
+        document.body.style.overflow = '';
+      });
+
+      settingsModalOverlay.addEventListener('click', () => {
+        settingsModal.style.display = 'none';
+        document.body.style.overflow = '';
+      });
+      settingsModalClose.addEventListener('click', () => {
+        settingsModal.style.display = 'none';
+        document.body.style.overflow = '';
+      });
+
+      if (userCardCompact) {
+        userCardCompact.style.cursor = 'pointer';
+        userCardCompact.addEventListener('click', () => {
+          const user = api.user;
+          if (user) {
+            window.location.href = `profile.html?userId=${user.id}&userType=${user.userType}`;
+          }
+        });
+      }
+
+      saveSettingsBtn.addEventListener('click', saveSettings);
+
+      settingsTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          settingsTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const tabName = tab.dataset.tab;
+          if (tabName === 'info') {
+            settingsInfo.style.display = 'block';
+            settingsSecurity.style.display = 'none';
+          } else if (tabName === 'security') {
+            settingsInfo.style.display = 'none';
+            settingsSecurity.style.display = 'block';
+          }
+        });
+      });
+
+      if (settingsLogoutBtn) {
+        settingsLogoutBtn.addEventListener('click', () => {
+          settingsModal.style.display = 'none';
+          document.body.style.overflow = '';
+          api.logout();
+        });
+      }
+    }
+
+    function handleSearch() {
+      currentKeyword = searchInput.value.trim();
+      currentPage = 1;
+      loadPosts();
+    }
+
+    async function loadPosts() {
+      postList.innerHTML = '<div class="post-item loading">加载中...</div>';
+      
+      try {
+        const result = currentKeyword 
+          ? await api.searchPosts(currentKeyword, currentPage, 5)
+          : await api.getPosts(currentPage, 5, '', currentCategory);
+
+        if (result.success) {
+          renderPosts(result.data.list);
+          renderPagination(result.data.total, result.data.pageSize);
+        } else {
+          postList.innerHTML = '<div class="post-item loading">加载失败: ' + (result.message || '未知错误') + '</div>';
+        }
+      } catch (error) {
+        postList.innerHTML = '<div class="post-item loading">加载失败: ' + error.message + '</div>';
+      }
+    }
+
+    function renderPosts(posts) {
+      if (!posts || posts.length === 0) {
+        postList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <p class="empty-text">暂无帖子</p>
+          </div>
+        `;
+        return;
+      }
+
+      postList.innerHTML = posts.map(post => `
+        <div class="post-item" data-id="${post.id}">
+          <div class="post-header">
+            <div class="post-author" data-author-id="${post.author_id}" data-author-type="${post.author_type}" onclick="event.stopPropagation(); showUserProfile(${post.author_id}, '${post.author_type}')">
+              <span class="author-avatar ${post.author_type}">${(post.author_name || 'U').charAt(0).toUpperCase()}</span>
+              <div class="author-info">
+                <span class="author-name">${post.author_name || '匿名用户'}</span>
+                <span class="post-time">${formatTime(post.created_at)}</span>
+              </div>
+            </div>
+            ${post.category ? `<span class="post-category">${post.category}</span>` : ''}
+          </div>
+          <h3 class="post-title">${highlightKeyword(escapeHtml(post.title), currentKeyword)}</h3>
+          <p class="post-summary">${highlightKeyword(escapeHtml(post.summary || post.content.substring(0, 150) + '...'), currentKeyword)}</p>
+          ${post.tags ? `<div class="post-tags">${post.tags.split(',').filter(t => t).map(tag => `<span class="post-tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
+          <div class="post-footer">
+            <div class="post-stats">
+              <span class="stat-item">
+                <span class="stat-icon">👁️</span>
+                <span class="stat-count">${post.view_count || 0}</span>
+              </span>
+              <span class="stat-item">
+                <span class="stat-icon">❤️</span>
+                <span class="stat-count">${post.like_count || 0}</span>
+              </span>
+              <span class="stat-item">
+                <span class="stat-icon">💬</span>
+                <span class="stat-count">${post.comment_count || 0}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      postList.querySelectorAll('.post-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const postId = item.dataset.id;
+          openPostDetail(postId);
+        });
+      });
+    }
+
+    function showPostList() {
+      postDetailContainer.style.display = 'none';
+      postList.style.display = 'flex';
+      pagination.style.display = 'flex';
+    }
+
+    function showPostDetail() {
+      postList.style.display = 'none';
+      pagination.style.display = 'none';
+      postDetailContainer.style.display = 'block';
+    }
+
+    async function openPostDetail(id) {
+      currentPostId = id;
+      showPostDetail();
+      
+      detailTitle.textContent = '加载中...';
+      detailMeta.innerHTML = '';
+      detailContent.innerHTML = '加载中...';
+      commentsList.innerHTML = '<div class="comment-item loading">加载评论中...</div>';
+      
+      try {
+        const result = await api.getPostDetail(id);
+        if (result.success && result.data) {
+          currentPost = result.data;
+          renderPostDetail(result.data);
+          loadComments(id);
+          loadLikeStatus(id);
+        } else {
+          detailTitle.textContent = '加载失败';
+          detailContent.innerHTML = result.message || '未知错误';
+        }
+      } catch (error) {
+        detailTitle.textContent = '加载失败';
+        detailContent.innerHTML = error.message;
+      }
+    }
+
+    function renderPostDetail(post) {
+      detailTitle.textContent = post.title;
+      
+      detailMeta.innerHTML = `
+        <span class="detail-meta-author" style="cursor: pointer;" onclick="showUserProfile(${post.author_id}, '${post.author_type}')">
+          <span class="author-avatar ${post.author_type}">${(post.author_name || 'U').charAt(0).toUpperCase()}</span>
+          <span class="detail-author-name">${post.author_name || '匿名用户'}</span>
+        </span>
+        <span class="detail-meta-time">${formatTime(post.created_at)}</span>
+        ${post.category ? `<span class="detail-meta-category">${post.category}</span>` : ''}
+      `;
+      
+      detailLikeCount.textContent = post.like_count || 0;
+      detailCommentCount.textContent = post.comment_count || 0;
+      detailViewCount.textContent = post.view_count || 0;
+      
+      detailContent.innerHTML = escapeHtml(post.content).replace(/\n/g, '<br>');
+    }
+
+    async function loadLikeStatus(postId) {
+      try {
+        const result = await api.getLikeStatus(postId);
+        if (result.success && result.data) {
+          isLiked = result.data.liked;
+          updateLikeButton();
+        }
+      } catch (error) {
+        console.error('获取点赞状态失败:', error);
+      }
+    }
+
+    function updateLikeButton() {
+      if (isLiked) {
+        detailLikeIcon.textContent = '❤️';
+        detailLikeText.textContent = '已点赞';
+        detailLikeBtn.classList.add('liked');
+      } else {
+        detailLikeIcon.textContent = '🤍';
+        detailLikeText.textContent = '点赞';
+        detailLikeBtn.classList.remove('liked');
+      }
+    }
+
+    async function handleLike() {
+      if (!currentPostId) return;
+      
+      try {
+        const result = await api.likePost(currentPostId);
+        if (result.success && result.data) {
+          isLiked = result.data.liked;
+          detailLikeCount.textContent = result.data.like_count;
+          updateLikeButton();
+        }
+      } catch (error) {
+        console.error('点赞失败:', error);
+        alert('点赞失败: ' + error.message);
+      }
+    }
+
+    async function loadComments(postId) {
+      try {
+        const result = await api.getComments(postId, 1, 50);
+        if (result.success && result.data) {
+          renderComments(result.data.list || []);
+          commentsCountLabel.textContent = `(${result.data.total || 0})`;
+        } else {
+          commentsList.innerHTML = '<div class="comment-item empty">暂无评论</div>';
+        }
+      } catch (error) {
+        commentsList.innerHTML = '<div class="comment-item error">加载评论失败</div>';
+        console.error('加载评论失败:', error);
+      }
+    }
+
+    function renderComments(comments) {
+      if (!comments || comments.length === 0) {
+        commentsList.innerHTML = '<div class="comment-item empty">暂无评论，快来抢沙发吧~</div>';
+        return;
+      }
+
+      commentsList.innerHTML = comments.map(comment => `
+        <div class="comment-item" data-id="${comment.id}">
+          <div class="comment-avatar ${comment.author_type}">${(comment.author_name || 'U').charAt(0).toUpperCase()}</div>
+          <div class="comment-body">
+            <div class="comment-header">
+              <span class="comment-author">${escapeHtml(comment.author_name || '匿名用户')}</span>
+              <span class="comment-time">${formatTime(comment.created_at)}</span>
+            </div>
+            <div class="comment-content">${escapeHtml(comment.content)}</div>
+            <div class="comment-footer">
+              <span class="comment-like">
+                <span>👍</span>
+                <span>${comment.like_count || 0}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function handleSubmitComment() {
+      const content = commentInput.value.trim();
+      
+      if (!content) {
+        alert('评论内容不能为空');
+        return;
+      }
+      
+      if (!currentPostId) return;
+      
+      try {
+        const result = await api.createComment(currentPostId, content);
+        if (result.success) {
+          commentInput.value = '';
+          loadComments(currentPostId);
+          
+          const currentCount = parseInt(detailCommentCount.textContent) || 0;
+          detailCommentCount.textContent = currentCount + 1;
+        } else {
+          alert('评论失败: ' + (result.message || '未知错误'));
+        }
+      } catch (error) {
+        alert('评论失败: ' + error.message);
+      }
+    }
+
+    function renderPagination(total, pageSize) {
+      totalPages = Math.ceil(total / pageSize);
+      
+      if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
+      }
+
+      let html = '';
+      
+      html += `<button class="page-btn ${currentPage === 1 ? 'disabled' : ''}" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 1}">上一页</button>`;
+      
+      const maxPages = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
+      let endPage = Math.min(totalPages, startPage + maxPages - 1);
+      
+      if (endPage - startPage + 1 < maxPages) {
+        startPage = Math.max(1, endPage - maxPages + 1);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+      }
+
+      html += `<button class="page-btn ${currentPage === totalPages ? 'disabled' : ''}" ${currentPage === totalPages ? 'disabled' : ''} data-page="${currentPage + 1}">下一页</button>`;
+
+      pagination.innerHTML = html;
+
+      pagination.querySelectorAll('.page-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const page = parseInt(btn.dataset.page);
+          if (page >= 1 && page <= totalPages && page !== currentPage) {
+            currentPage = page;
+            loadPosts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
+    }
+
+    async function loadHotPosts() {
+      try {
+        const result = await api.getHotPosts(8);
+        if (result.success && result.data) {
+          renderHotPosts(result.data);
+        }
+      } catch (error) {
+        console.error('加载热门帖子失败:', error);
+      }
+    }
+
+    function renderHotPosts(posts) {
+      if (!posts || posts.length === 0) {
+        hotList.innerHTML = '<li class="hot-item">暂无热门</li>';
+        return;
+      }
+
+      hotList.innerHTML = posts.map((post, index) => `
+        <li class="hot-item" data-id="${post.id}">
+          <span class="hot-rank ${index < 3 ? 'top' : ''}">${index + 1}</span>
+          <span class="hot-title">${escapeHtml(post.title)}</span>
+        </li>
+      `).join('');
+
+      hotList.querySelectorAll('.hot-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const postId = item.dataset.id;
+          openPostDetail(postId);
+        });
+      });
+    }
+
+    async function handlePublish() {
+      const title = document.getElementById('publishTitle').value.trim();
+      const category = document.getElementById('publishCategory').value;
+      const tags = document.getElementById('publishTags').value.trim();
+      const content = document.getElementById('publishContent').value.trim();
+
+      if (!title || !content) {
+        alert('标题和内容不能为空');
+        return;
+      }
+
+      try {
+        const result = await api.createPost({
+          title,
+          content,
+          summary: content.substring(0, 200),
+          tags,
+          category
+        });
+
+        if (result.success) {
+          alert('发布成功！');
+          publishPanel.style.display = 'none';
+          document.getElementById('publishTitle').value = '';
+          document.getElementById('publishTags').value = '';
+          document.getElementById('publishContent').value = '';
+          currentPage = 1;
+          loadPosts();
+        } else {
+          alert('发布失败: ' + (result.message || '未知错误'));
+        }
+      } catch (error) {
+        alert('发布失败: ' + error.message);
+      }
+    }
+
+    function escapeRegExp(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function highlightKeyword(text, keyword) {
+      if (!keyword || !text) return text;
+      const regex = new RegExp(`(${escapeRegExp(keyword)})`, 'gi');
+      return text.replace(regex, '<span class="highlight-keyword">$1</span>');
+    }
+
+    async function showUserProfile(userId, userType) {
+      if (!userId || !userType) return;
+      window.location.href = `profile.html?userId=${userId}&userType=${userType}`;
+    }
+
+    async function loadMessages() {
+      await loadMessagesByType('all');
+    }
+
+    async function loadMessagesByType(type) {
+      if (!messageList) return;
+      messageList.innerHTML = '<div class="message-item loading">加载中...</div>';
+
+      try {
+        const result = await api.getMessages(1, 20, type);
+        if (result.success) {
+          renderMessages(result.data.list || []);
+        } else {
+          messageList.innerHTML = '<div class="message-item empty">加载失败: ' + (result.message || '未知错误') + '</div>';
+        }
+      } catch (error) {
+        messageList.innerHTML = '<div class="message-item empty">加载失败: ' + error.message + '</div>';
+      }
+    }
+
+    function renderMessages(messages) {
+      if (!messages || messages.length === 0) {
+        messageList.innerHTML = '<div class="message-item empty">暂无消息</div>';
+        return;
+      }
+
+      messageList.innerHTML = messages.map(msg => {
+        const typeIcons = { system: '🔔', comment: '💬', like: '❤️', follow: '👤' };
+        const icon = typeIcons[msg.type] || '🔔';
+        return `
+          <div class="message-item ${msg.is_read === 0 ? 'unread' : ''}" data-id="${msg.id}" data-post-id="${msg.post_id || ''}" data-type="${msg.type}">
+            <span class="message-avatar">${icon}</span>
+            <div class="message-content">
+              <span class="message-title">${escapeHtml(msg.title)}</span>
+              <span class="message-desc">${escapeHtml(msg.content || '')}</span>
+              <span class="message-time">${formatTime(msg.created_at)}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // 绑定消息点击事件
+      messageList.querySelectorAll('.message-item[data-id]').forEach(item => {
+        item.addEventListener('click', async () => {
+          const msgId = item.dataset.id;
+          const postId = item.dataset.postId;
+
+          // 标记已读
+          try {
+            await api.markAsRead(msgId);
+          } catch (e) {}
+
+          // 移除未读样式
+          item.classList.remove('unread');
+
+          // 跳转到文章
+          if (postId) {
+            messagePanel.style.display = 'none';
+            showPostDetail(postId);
+          }
+        });
+      });
+    }
+
+    async function loadUnreadCount() {
+      try {
+        const result = await api.getUnreadCount();
+        if (result.success && result.data > 0) {
+          const badge = document.querySelector('.message-badge');
+          if (badge) {
+            badge.textContent = result.data > 99 ? '99+' : result.data;
+            badge.style.display = 'flex';
+          }
+        }
+      } catch (error) {
+        console.error('加载未读消息数失败:', error);
+      }
+    }
+
+    async function loadHistory() {
+      if (!recentList) return;
+
+      try {
+        const result = await api.getHistoryList(1, 10);
+        if (result.success) {
+          renderHistory(result.data.list || []);
+        }
+      } catch (error) {
+        console.error('加载浏览历史失败:', error);
+      }
+    }
+
+    function renderHistory(list) {
+      if (!recentList) return;
+
+      if (!list || list.length === 0) {
+        recentList.innerHTML = '<li class="recent-item empty">暂无浏览记录</li>';
+        return;
+      }
+
+      recentList.innerHTML = list.map(item => `
+        <li class="recent-item" data-id="${item.post_id}" style="cursor: pointer;">
+          <span class="recent-title">${escapeHtml(item.post_title || '无标题')}</span>
+          <span class="recent-time">${formatTime(item.created_at)}</span>
+        </li>
+      `).join('');
+
+      recentList.querySelectorAll('.recent-item[data-id]').forEach(item => {
+        item.addEventListener('click', () => {
+          const postId = item.dataset.id;
+          if (postId) {
+            openPostDetail(postId);
+          }
+        });
+      });
+    }
+
+    function openSettings() {
+      const user = api.user;
+      if (!user) return;
+
+      settingsModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+
+      const displayName = user.userType === 'personal'
+        ? user.username
+        : (user.real_name || user.employee_id || '用户');
+      const userTypeText = user.userType === 'enterprise' ? '企业用户' : '个人用户';
+      const roleText = user.role === 'root' ? '管理员' : userTypeText;
+
+      const settingsAvatar = document.getElementById('settingsAvatar');
+      const settingsName = document.getElementById('settingsName');
+      const settingsRoleBadge = document.getElementById('settingsRoleBadge');
+
+      settingsAvatar.textContent = displayName.charAt(0).toUpperCase();
+      settingsName.textContent = displayName;
+      settingsRoleBadge.textContent = roleText;
+
+      if (user.userType === 'enterprise') {
+        settingsAvatar.style.background = 'linear-gradient(135deg, #0ea5e9, #6366f1)';
+      } else {
+        settingsAvatar.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      }
+
+      document.getElementById('settingsUsername').value = displayName;
+      document.getElementById('settingsEmail').value = user.email || '';
+      document.getElementById('settingsUserType').value = userTypeText;
+
+      const enterpriseInfoGroup = document.getElementById('enterpriseInfoGroup');
+      const enterpriseDeptGroup = document.getElementById('enterpriseDeptGroup');
+      const enterprisePosGroup = document.getElementById('enterprisePosGroup');
+
+      if (user.userType === 'enterprise') {
+        enterpriseInfoGroup.style.display = 'block';
+        enterpriseDeptGroup.style.display = 'block';
+        enterprisePosGroup.style.display = 'block';
+        document.getElementById('settingsEmployeeId').value = user.employee_id || '';
+        document.getElementById('settingsDepartment').value = user.department || '';
+        document.getElementById('settingsPosition').value = user.position || '';
+      } else {
+        enterpriseInfoGroup.style.display = 'none';
+        enterpriseDeptGroup.style.display = 'none';
+        enterprisePosGroup.style.display = 'none';
+      }
+
+      if (user.created_at) {
+        document.getElementById('registerTime').textContent = formatTime(user.created_at);
+      }
+
+      loadUserStats();
+    }
+
+    async function loadUserStats() {
+      const user = api.user;
+      if (!user) return;
+
+      try {
+        const result = await api.getUserProfile(user.userId || user.id, user.userType);
+        if (result.success && result.data) {
+          document.getElementById('settingsPostCount').textContent = result.data.post_count || 0;
+        }
+      } catch (error) {
+        console.error('加载用户统计失败:', error);
+      }
+    }
+
+    async function saveSettings() {
+      const email = document.getElementById('settingsEmail').value.trim();
+
+      try {
+        const result = await api.updateProfile({ email });
+        if (result.success) {
+          alert('保存成功！');
+          if (api.user) {
+            api.user.email = email;
+            localStorage.setItem('user', JSON.stringify(api.user));
+          }
+          settingsModal.style.display = 'none';
+          document.body.style.overflow = '';
+        } else {
+          alert('保存失败: ' + (result.message || '未知错误'));
+        }
+      } catch (error) {
+        alert('保存失败: ' + error.message);
+      }
+    }
+
+    function formatTime(dateStr) {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diff = now - date;
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+
+      if (minutes < 1) return '刚刚';
+      if (minutes < 60) return `${minutes}分钟前`;
+      if (hours < 24) return `${hours}小时前`;
+      if (days < 7) return `${days}天前`;
+      
+      return date.toLocaleDateString('zh-CN');
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ========== 全局主题设置 ==========
+    let currentTheme = localStorage.getItem('appTheme') || 'light';
+    let currentBg = localStorage.getItem('appBg') || 'default';
+    let customBg = localStorage.getItem('appCustomBg') || '';
+    let customBtnColor = localStorage.getItem('appBtnColor') || '#667eea';
+
+    const backgroundStyles = {
+      'default': 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+      'sunset': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      'ocean': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+      'forest': 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+      'night': 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)'
+    };
+
+    const dynamicStyles = document.createElement('style');
+    dynamicStyles.id = 'themeDynamicStyles';
+    document.head.appendChild(dynamicStyles);
+
+    function applyCustomBtnColor(color) {
+      customBtnColor = color;
+      localStorage.setItem('appBtnColor', color);
+
+      dynamicStyles.innerHTML = `
+        .settings-btn { border-color: ${color}20 !important; }
+        .settings-btn:hover { border-color: ${color}60 !important; background: ${color}10 !important; }
+        .filter-capsule.active, .nav-item.active { background: ${color}20 !important; color: ${color} !important; }
+        .filter-capsule:hover, .nav-item:hover { background: ${color}10 !important; }
+        .profile-tab.active, .category-item.active { color: ${color} !important; border-color: ${color} !important; }
+        .profile-badge, .category-tag, .settings-status { background: ${color}15 !important; color: ${color} !important; }
+        .page-btn.active, .submit-comment-btn, .action-btn.primary { background: linear-gradient(135deg, ${color}, ${adjustColor(color, 30)}) !important; }
+        .page-btn:hover:not(:disabled):not(.active) { border-color: ${color} !important; color: ${color} !important; }
+        .post-item:hover { border-color: ${color}30 !important; box-shadow: 0 8px 24px ${color}15 !important; }
+        .publish-btn, .confirm-btn { background: linear-gradient(135deg, ${color}, ${adjustColor(color, 20)}) !important; }
+        .btnColorDot { background: ${color} !important; }
+      `;
+
+      const dot = document.getElementById('btnColorDot');
+      if (dot) dot.style.background = color;
+    }
+
+    function adjustColor(color, amount) {
+      const hex = color.replace('#', '');
+      const r = Math.min(255, parseInt(hex.substr(0, 2), 16) + amount);
+      const g = Math.min(255, parseInt(hex.substr(2, 2), 16) + amount);
+      const b = Math.min(255, parseInt(hex.substr(4, 2), 16) + amount);
+      return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    }
+
+    function applyTheme(theme) {
+      currentTheme = theme;
+      localStorage.setItem('appTheme', theme);
+
+      const themeStyles = document.getElementById('themeStyles') || dynamicStyles;
+      if (theme === 'dark') {
+        themeStyles.innerHTML = `
+          body { color: #f0f0f0 !important; }
+          .app-container { background: rgba(10, 10, 15, 0.85) !important; }
+          .sidebar-section {
+            background: rgba(20, 20, 25, 0.9) !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+          }
+          .sidebar-title { color: #f0f0f0 !important; }
+          .sidebar-title.sub-title { color: #888 !important; }
+          .user-card-compact { background: transparent !important; border: none !important; box-shadow: none !important; }
+          .user-name-large { color: #f0f0f0 !important; }
+          .user-role { color: #888 !important; }
+          .action-btn { background: rgba(30, 30, 40, 0.8) !important; color: #e0e0e0 !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .action-btn:hover { background: rgba(40, 40, 50, 0.9) !important; }
+          .action-btn.primary { background: linear-gradient(135deg, ${customBtnColor}, ${adjustColor(customBtnColor, 30)}) !important; color: white !important; border: none !important; }
+          .action-icon { color: inherit !important; }
+          .action-btn.primary .action-icon { color: white !important; }
+          .profile-stats .stat-item { background: transparent !important; border: none !important; }
+          .stat-number { color: #f0f0f0 !important; }
+          .stat-label { color: #888 !important; }
+          .recent-item { background: transparent !important; border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .recent-item:hover { background: rgba(255, 255, 255, 0.06) !important; }
+          .recent-title { color: #e0e0e0 !important; }
+          .recent-time { color: #888 !important; }
+          .settings-btn { background: rgba(30, 30, 40, 0.8) !important; color: #e0e0e0 !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .settings-btn:hover { background: rgba(40, 40, 50, 0.9) !important; }
+          .settings-icon { color: #e0e0e0 !important; }
+          .settings-status { background: ${customBtnColor}30 !important; color: ${customBtnColor} !important; }
+          .settings-btn.logout-btn { background: rgba(239, 68, 68, 0.1) !important; border-color: rgba(239, 68, 68, 0.2) !important; color: #ef4444 !important; }
+          .settings-btn.logout-btn:hover { background: rgba(239, 68, 68, 0.2) !important; }
+          .bg-upload-btn { background: rgba(30, 30, 40, 0.8) !important; color: #e0e0e0 !important; border: 1px dashed rgba(255, 255, 255, 0.1) !important; }
+          .bg-upload-btn:hover { background: rgba(40, 40, 50, 0.9) !important; }
+          .divider.vertical-divider { background: rgba(255, 255, 255, 0.06) !important; }
+          .search-capsule-inner { background: rgba(30, 30, 40, 0.9) !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .search-capsule-input { background: transparent !important; color: #f0f0f0 !important; }
+          .search-capsule-input::placeholder { color: #888 !important; }
+          .filter-capsule { color: #888 !important; }
+          .filter-capsule.active { background: ${customBtnColor}20 !important; color: ${customBtnColor} !important; }
+          .content-top-bar { background: transparent !important; box-shadow: none !important; }
+          .content { background: transparent !important; }
+          .post-item { background: rgba(20, 20, 25, 0.9) !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .post-item:hover { background: rgba(30, 30, 40, 0.95) !important; }
+          .post-title { color: #f0f0f0 !important; }
+          .post-summary { color: #a0a0a0 !important; }
+          .post-meta { color: #888 !important; }
+          .post-stats .stat-item { color: #888 !important; }
+          .post-tag { background: rgba(255, 255, 255, 0.06) !important; color: #a0a0a0 !important; }
+          .page-btn { background: rgba(20, 20, 25, 0.9) !important; color: #e0e0e0 !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .page-btn:disabled { color: #666 !important; }
+          .page-btn.active { background: linear-gradient(135deg, ${customBtnColor}, ${adjustColor(customBtnColor, 30)}) !important; }
+          .post-detail-container { background: transparent !important; }
+          .post-detail-article { background: rgba(20, 20, 25, 0.9) !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .post-detail-title { color: #ffffff !important; }
+          .post-detail-meta { color: #a0a0a0 !important; }
+          .post-detail-content { color: #e0e0e0 !important; }
+          .back-to-list-btn { background: rgba(30, 30, 40, 0.9) !important; color: #e0e0e0 !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .detail-action-btn { background: rgba(30, 30, 40, 0.9) !important; color: #e0e0e0 !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .comments-section { background: rgba(20, 20, 25, 0.95) !important; }
+          .comments-title { color: #f0f0f0 !important; }
+          .comment-textarea { background: rgba(30, 30, 40, 0.9) !important; color: #f0f0f0 !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .comment-textarea::placeholder { color: #888 !important; }
+          .submit-comment-btn { background: linear-gradient(135deg, ${customBtnColor}, ${adjustColor(customBtnColor, 30)}) !important; }
+          .comment-item { background: rgba(20, 20, 25, 0.9) !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .comment-author { color: #f0f0f0 !important; }
+          .comment-content { color: #e0e0e0 !important; }
+          .comment-time { color: #888 !important; }
+          .modal-content { background: rgba(20, 20, 25, 0.98) !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .modal-header h2 { color: #f0f0f0 !important; }
+          .modal-close { color: #888 !important; }
+          .form-label { color: #e0e0e0 !important; }
+          .form-input, .form-textarea, .form-select { background: rgba(30, 30, 40, 0.9) !important; color: #f0f0f0 !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .form-input::placeholder, .form-textarea::placeholder { color: #888 !important; }
+          .cancel-btn { background: rgba(30, 30, 40, 0.9) !important; color: #e0e0e0 !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .confirm-btn { background: linear-gradient(135deg, ${customBtnColor}, ${adjustColor(customBtnColor, 30)}) !important; color: white !important; }
+          .message-modal-content { background: rgba(20, 20, 25, 0.98) !important; }
+          .message-tab { color: #888 !important; }
+          .message-tab.active { color: ${customBtnColor} !important; border-bottom-color: ${customBtnColor} !important; }
+          .message-item { background: rgba(20, 20, 25, 0.9) !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .message-title { color: #f0f0f0 !important; }
+          .message-text { color: #a0a0a0 !important; }
+          .message-time { color: #888 !important; }
+          .message-empty { color: #888 !important; }
+          .panel-overlay { background: transparent !important; }
+          .panel-container { background: rgba(20, 20, 25, 0.95) !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1), 0 2px 8px rgba(0, 0, 0, 0.3) !important; }
+          .panel-header { border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .panel-header h2 { color: #f0f0f0 !important; }
+          .panel-close { background: rgba(255, 255, 255, 0.06) !important; color: #888 !important; }
+          .panel-close:hover { background: rgba(255, 255, 255, 0.1) !important; color: #f0f0f0 !important; }
+          .panel-footer { border-top: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .panel-action-btn { background: rgba(102, 126, 234, 0.15) !important; color: #818cf8 !important; }
+          .panel-action-btn:hover { background: rgba(102, 126, 234, 0.25) !important; }
+          .hot-item { background: transparent !important; border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important; }
+          .hot-item:hover { background: rgba(255, 255, 255, 0.06) !important; }
+          .hot-title { color: #e0e0e0 !important; }
+          .hot-time { color: #888 !important; }
+          .category-item { color: #888 !important; }
+          .category-item:hover { background: rgba(255, 255, 255, 0.06) !important; }
+          .category-item.active { background: ${customBtnColor}20 !important; color: ${customBtnColor} !important; }
+          .nav-item { color: #888 !important; }
+          .nav-item:hover { background: rgba(255, 255, 255, 0.06) !important; }
+          .nav-item.active { background: ${customBtnColor}20 !important; color: ${customBtnColor} !important; }
+          .nav-icon { color: inherit !important; }
+          .category-icon { color: inherit !important; }
+        `;
+        const statusEl = document.getElementById('themeStatus');
+        if (statusEl) statusEl.textContent = '深色';
+      } else {
+        themeStyles.innerHTML = '';
+        const statusEl = document.getElementById('themeStatus');
+        if (statusEl) statusEl.textContent = '浅色';
+      }
+    }
+
+    function applyBackground(bg) {
+      currentBg = bg;
+      localStorage.setItem('appBg', bg);
+
+      if (bg === 'custom' && customBg) {
+        document.body.style.background = `url('${customBg}') center/cover no-repeat fixed`;
+      } else if (backgroundStyles[bg]) {
+        document.body.style.background = backgroundStyles[bg] + ' no-repeat fixed';
+      } else {
+        document.body.style.background = backgroundStyles['default'] + ' no-repeat fixed';
+      }
+
+      document.querySelectorAll('.bg-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.bg === bg);
+      });
+    }
+
+    function bindSettingsEvents() {
+      // 深色/浅色模式切换
+      const themeBtn = document.getElementById('themeToggleBtn');
+      if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+          applyTheme(currentTheme === 'light' ? 'dark' : 'light');
+        });
+      }
+
+      // 背景切换
+      const bgBtn = document.getElementById('bgToggleBtn');
+      if (bgBtn) {
+        bgBtn.addEventListener('click', () => {
+          const bgSection = document.getElementById('bgOptionsSection');
+          bgSection.style.display = bgSection.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+
+      document.querySelectorAll('.bg-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          customBg = '';
+          localStorage.removeItem('appCustomBg');
+          applyBackground(opt.dataset.bg);
+        });
+      });
+
+      // 自定义背景上传
+      const bgUploadInput = document.getElementById('bgUploadInput');
+      if (bgUploadInput) {
+        bgUploadInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              customBg = event.target.result;
+              localStorage.setItem('appCustomBg', customBg);
+              currentBg = 'custom';
+              localStorage.setItem('appBg', 'custom');
+              applyBackground('custom');
+              document.querySelectorAll('.bg-option').forEach(opt => opt.classList.remove('active'));
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      const bgUploadBtn = document.getElementById('bgUploadBtn');
+      if (bgUploadBtn) {
+        bgUploadBtn.addEventListener('click', () => {
+          if (bgUploadInput) bgUploadInput.click();
+        });
+      }
+
+      // 主题色按钮
+      const btnColorPicker = document.getElementById('btnColorPicker');
+      const btnColorBtn = document.getElementById('btnColorBtn');
+      if (btnColorBtn && btnColorPicker) {
+        btnColorBtn.addEventListener('click', () => {
+          btnColorPicker.value = customBtnColor;
+          btnColorPicker.click();
+        });
+        btnColorPicker.addEventListener('input', (e) => {
+          applyCustomBtnColor(e.target.value);
+        });
+      }
+
+      // 退出登录
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          if (confirm('确定要退出登录吗？')) {
+            api.clearAuth();
+            window.location.href = 'login.html';
+          }
+        });
+      }
+    }
+
+    // 监听其他页面修改的主题设置
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'appTheme' || e.key === 'appBg' || e.key === 'appBtnColor') {
+        if (e.key === 'appTheme') {
+          currentTheme = e.newValue || 'light';
+          applyTheme(currentTheme);
+        } else if (e.key === 'appBg') {
+          if (e.key === 'appBg' && e.newValue === 'custom') {
+            customBg = localStorage.getItem('appCustomBg') || '';
+          }
+          applyBackground(e.newValue || 'default');
+        } else if (e.key === 'appBtnColor') {
+          applyCustomBtnColor(e.newValue || '#667eea');
+        }
+      }
+    });
+
+    // 初始化设置
+    applyCustomBtnColor(customBtnColor);
+    applyTheme(currentTheme);
+    applyBackground(currentBg);
+    bindSettingsEvents();
+
+    init();
+  </script>
+</body>
+</html>
