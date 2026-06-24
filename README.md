@@ -4,7 +4,15 @@
 
 ![Version](https://img.shields.io/badge/version-v0.9--Beta1-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/badge/license-Apache--2.0-green)
+
+## 许可证
+
+本项目基于 [Apache License 2.0](LICENSE) 开源许可。
+
+- 您可以自由使用、复制、修改、分发本项目
+- 允许商业使用，只需保留版权声明
+- 详细条款请参阅 [LICENSE](LICENSE) 文件
 
 ## 功能特性
 
@@ -153,10 +161,6 @@ npm run build:mac
 - 优化登录页面 UI
 - 修复后端启动问题
 - 增强 API 健康检查接口
-
-## 许可证
-
-[MIT License](LICENSE)
 
 ## 联系方式
 
