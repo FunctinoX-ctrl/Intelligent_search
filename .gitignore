@@ -1,0 +1,120 @@
+# ==============================
+# 通用
+# ==============================
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# 日志
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 环境变量 / 本地配置
+.env
+.env.local
+.env.*.local
+application-local.yml
+application-dev.yml
+application-test.yml
+
+# ==============================
+# Node / Electron (Intelligent_search)
+# ==============================
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Electron 运行期缓存与用户数据
+Intelligent_search/.electron-cache/
+Intelligent_search/.electron-userdata/
+
+# 构建产物
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# 打包输出
+*.exe
+*.dmg
+*.deb
+*.snap
+*.AppImage
+release/
+*.zip
+*.tar.gz
+
+# 缓存
+.cache/
+.tmp/
+.temp/
+.parcel-cache/
+.eslintcache
+
+# 覆盖率
+coverage/
+.nyc_output/
+
+# ==============================
+# Java / Maven / Spring Boot (backend-java)
+# ==============================
+backend-java/target/
+backend-java/.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IDE 工具
+backend-java/.idea/
+backend-java/.vscode/
+backend-java/*.iml
+
+# IntelliJ
+backend-java/out/
+
+# 编译产物
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+
+# ==============================
+# 上传/部署脚本（敏感信息，全部不提交）
+# ==============================
+ssh/
+__pycache__/
+*.pyc
+
+# ==============================
+# 密钥与凭据
+# ==============================
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/

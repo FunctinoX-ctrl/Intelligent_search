@@ -1,0 +1,28 @@
+server:
+  port: 3001
+
+spring:
+  application:
+    name: intelligent-search
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/intelligent_search?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: is_user
+    password: Is@123456
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: status
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+
+jwt:
+  secret: intelligent_search_secret_key_2026_spring_boot
+  expiration: 86400000
