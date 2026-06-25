@@ -1,6 +1,6 @@
 {
   "name": "Intelligent_search",
-  "version": "1.0.0",
+  "version": "0.9.0-beta.2",
   "description": "智能搜索客户端",
   "main": "main.js",
   "scripts": {
