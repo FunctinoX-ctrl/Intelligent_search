@@ -23,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -47,6 +50,69 @@ public class PostServiceImpl implements PostService {
         Page<Post> pageParam = new Page<>(page, pageSize);
         IPage<Post> result = postMapper.getPostList(pageParam, keyword != null ? keyword : "", category != null ? category : "");
         return Result.success(result);
+    }
+
+    /**
+     * 智能搜索：将关键词分词后多维度权重匹配 + 相关度排序
+     * 分词策略：按空格/逗号分割，同时保留完整词组做精确匹配
+     */
+    @Override
+    public Result<IPage<Post>> smartSearch(Integer page, Integer pageSize, String keyword, String category) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getPostList(page, pageSize, "", category);
+        }
+
+        List<String> words = tokenize(keyword);
+        Page<Post> pageParam = new Page<>(page, pageSize);
+        IPage<Post> result = postMapper.smartSearch(pageParam, words, category != null ? category : "");
+        return Result.success(result);
+    }
+
+    @Override
+    public Result<List<String>> searchSuggestions(String keyword, Integer limit) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return Result.success(new ArrayList<>());
+        }
+        List<String> words = tokenize(keyword);
+        List<String> suggestions = postMapper.searchSuggestions(words, limit != null ? limit : 8);
+        return Result.success(suggestions);
+    }
+
+    /**
+     * 分词：空格/逗号/中文无空格时按2字滑窗+完整词组
+     */
+    private List<String> tokenize(String keyword) {
+        List<String> words = new ArrayList<>();
+        keyword = keyword.trim();
+
+        // 保留完整关键词做精确匹配
+        if (!keyword.isEmpty()) {
+            words.add(keyword);
+        }
+
+        // 按空格和常见分隔符分词
+        String[] parts = keyword.split("[\\s,，、|;；]+");
+        for (String part : parts) {
+            String trimmed = part.trim();
+            if (!trimmed.isEmpty() && !words.contains(trimmed)) {
+                words.add(trimmed);
+            }
+        }
+
+        // 对较长的中文片段生成2字滑窗（提升部分匹配率）
+        for (String part : parts) {
+            String trimmed = part.trim();
+            if (trimmed.length() > 2) {
+                for (int i = 0; i <= trimmed.length() - 2; i++) {
+                    String bigram = trimmed.substring(i, i + 2);
+                    if (!words.contains(bigram)) {
+                        words.add(bigram);
+                    }
+                }
+            }
+        }
+
+        return words.stream().distinct().collect(Collectors.toList());
     }
 
     @Override

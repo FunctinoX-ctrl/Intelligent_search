@@ -9,6 +9,8 @@ import java.util.Map;
 
 public interface PostService {
     Result<IPage<Post>> getPostList(Integer page, Integer pageSize, String keyword, String category);
+    Result<IPage<Post>> smartSearch(Integer page, Integer pageSize, String keyword, String category);
+    Result<List<String>> searchSuggestions(String keyword, Integer limit);
     Result<List<Post>> getHotPosts(Integer limit);
     Result<Post> getPostDetail(Integer id);
     Result<Map<String, Object>> createPost(String title, String content, String summary, String coverImage, String tags, String category);

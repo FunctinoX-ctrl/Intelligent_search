@@ -49,6 +49,7 @@ public class PostController {
     @GetMapping("/search")
     public Result<Map<String, Object>> searchPosts(
             @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "") String category,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer pageSize) {
         if (keyword == null || keyword.trim().isEmpty()) {
@@ -59,7 +60,24 @@ public class PostController {
             emptyData.put("pageSize", pageSize);
             return Result.success(emptyData);
         }
-        return getPostList(page, pageSize, keyword, "");
+        Result<IPage<Post>> result = postService.smartSearch(page, pageSize, keyword, category);
+        if (result.isSuccess() && result.getData() != null) {
+            IPage<Post> pageData = result.getData();
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", pageData.getRecords());
+            data.put("total", (int) pageData.getTotal());
+            data.put("page", (int) pageData.getCurrent());
+            data.put("pageSize", (int) pageData.getSize());
+            return Result.success(data);
+        }
+        return Result.error(result.getMessage());
+    }
+
+    @GetMapping("/search/suggestions")
+    public Result<List<String>> searchSuggestions(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "8") Integer limit) {
+        return postService.searchSuggestions(keyword, limit);
     }
 
     @GetMapping("/hot")
